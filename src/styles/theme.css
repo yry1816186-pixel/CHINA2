@@ -1,0 +1,14 @@
+:root {
+  --color-bg: #0a1011;
+  --color-bg-elevated: #12191b;
+  --color-panel: rgba(255, 255, 255, 0.04);
+  --color-panel-strong: rgba(255, 255, 255, 0.08);
+  --color-border: rgba(255, 255, 255, 0.1);
+  --color-ink-contrast: #f3ead8;
+  --color-ink-muted: rgba(243, 234, 216, 0.72);
+  --color-ink-soft: rgba(243, 234, 216, 0.48);
+  --color-gold-soft: #d8ba69;
+  --color-gold-strong: #f0d792;
+  --color-accent: #c56c49;
+  --shadow-panel: 0 20px 80px rgba(0, 0, 0, 0.28);
+}

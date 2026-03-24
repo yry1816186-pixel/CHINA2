@@ -1,0 +1,70 @@
+import React, { useState, useEffect } from "react";
+import { BrowserRouter, Routes, Route } from "react-router";
+import { ProgressProvider, NavigationProvider } from "./context";
+import { HomePage, BuildingDetailPage } from "./pages";
+import LoadingScreen from "./components/LoadingScreen";
+import ErrorBoundary from "./components/ErrorBoundary";
+import FirstTimeGuide from "./components/FirstTimeGuide";
+import { ToastProvider } from "./components/Toast";
+import "../styles/index.css";
+
+export default function App() {
+  const [isLoading, setIsLoading] = useState(true);
+  const [showContent, setShowContent] = useState(false);
+  const [showGuide, setShowGuide] = useState(false);
+  const [guideComplete, setGuideComplete] = useState(false);
+
+  const handleLoadingComplete = () => {
+    setIsLoading(false);
+    setTimeout(() => {
+      setShowContent(true);
+      // 检查是否需要显示引导
+      const hasCompletedGuide = localStorage.getItem("huaxia_guide_completed");
+      if (!hasCompletedGuide) {
+        setShowGuide(true);
+      } else {
+        setGuideComplete(true);
+      }
+    }, 100);
+  };
+
+  const handleGuideComplete = () => {
+    setShowGuide(false);
+    setGuideComplete(true);
+  };
+
+  // 错误处理函数
+  const handleError = (error: Error, errorInfo: React.ErrorInfo) => {
+    // 可以在这里添加错误日志上报
+    console.error("Application Error:", error, errorInfo);
+  };
+
+  return (
+    <ErrorBoundary onError={handleError}>
+      <ToastProvider>
+        {/* 加载屏幕 */}
+        {isLoading && <LoadingScreen onComplete={handleLoadingComplete} />}
+
+        {/* 首次访问引导 */}
+        {showGuide && <FirstTimeGuide onComplete={handleGuideComplete} />}
+
+        {/* 主应用内容 */}
+        {showContent && (
+          <BrowserRouter>
+            <ProgressProvider>
+              <NavigationProvider>
+                <Routes>
+                  <Route path="/" element={<HomePage />} />
+                  <Route
+                    path="/building/:id"
+                    element={<BuildingDetailPage />}
+                  />
+                </Routes>
+              </NavigationProvider>
+            </ProgressProvider>
+          </BrowserRouter>
+        )}
+      </ToastProvider>
+    </ErrorBoundary>
+  );
+}

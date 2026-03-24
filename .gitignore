@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.git/
+
+# local workspace artifacts
+CHINA2/
+
+# logs
+*.log
+pnpm-debug.log*
