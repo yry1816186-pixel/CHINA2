@@ -1,8 +1,10 @@
 :root {
   --color-bg: #0a1011;
   --color-bg-elevated: #12191b;
+  --color-bg-deep: #06090b;
   --color-panel: rgba(255, 255, 255, 0.04);
   --color-panel-strong: rgba(255, 255, 255, 0.08);
+  --color-panel-warm: rgba(216, 186, 105, 0.08);
   --color-border: rgba(255, 255, 255, 0.1);
   --color-ink-contrast: #f3ead8;
   --color-ink-muted: rgba(243, 234, 216, 0.72);
@@ -10,5 +12,10 @@
   --color-gold-soft: #d8ba69;
   --color-gold-strong: #f0d792;
   --color-accent: #c56c49;
+  --color-jade: #7ea08a;
+  --color-sky: #6a90a9;
+  --color-clay: #8d4f3c;
   --shadow-panel: 0 20px 80px rgba(0, 0, 0, 0.28);
+  --shadow-panel-strong: 0 30px 120px rgba(0, 0, 0, 0.38);
+  --shadow-inner: inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
