@@ -22,6 +22,7 @@ import {
   technologyPillars,
 } from "../data/buildings";
 import { useProgress } from "../context/ProgressContext";
+import usePageMeta from "../hooks/usePageMeta";
 
 const sectionLinks = [
   { id: "overview", label: "总览" },
@@ -33,6 +34,10 @@ const sectionLinks = [
 export default function HomePage() {
   const { progress, hasVisited, hasEarnedSeal } = useProgress();
   const heroBuilding = buildingsData[0];
+  usePageMeta({
+    title: "中国古代建筑艺术与科技融合",
+    description: homeSummary.subtitle,
+  });
   const { scrollYProgress } = useScroll();
   const progressScale = useSpring(scrollYProgress, {
     stiffness: 140,
@@ -89,7 +94,11 @@ export default function HomePage() {
         </div>
       </header>
 
-      <main className="relative z-10 mx-auto max-w-7xl px-6 pb-24 pt-8 md:px-8 md:pt-14">
+      <main
+        id="main-content"
+        tabIndex={-1}
+        className="relative z-10 mx-auto max-w-7xl px-6 pb-24 pt-8 outline-none md:px-8 md:pt-14"
+      >
         <section
           id="overview"
           className="grid items-start gap-10 lg:grid-cols-[1.04fr_0.96fr] lg:gap-12"

@@ -12,10 +12,12 @@ import {
   Sparkles,
 } from "lucide-react";
 import { Link, useParams } from "react-router";
+import NotFoundState from "../components/NotFoundState";
 import ModuleVisualizer from "../components/site/ModuleVisualizer";
 import MonumentIllustration from "../components/site/MonumentIllustration";
 import { buildingsById, buildingsData } from "../data/buildings";
 import { useProgress } from "../context/ProgressContext";
+import usePageMeta from "../hooks/usePageMeta";
 import { getModuleProgressKey, moduleLabels, type ModuleId } from "../types";
 
 export default function BuildingDetailPage() {
@@ -40,11 +42,17 @@ export default function BuildingDetailPage() {
     mass: 0.25,
   });
 
+  usePageMeta({
+    title: building ? `${building.name}专题` : "建筑专题未找到",
+    description: building
+      ? `${building.tagline}。本专题从${building.modules.map((module) => module.title).join("、")}等维度展开，帮助读者理解其文化内核、结构智慧与保护逻辑。`
+      : "当前访问的建筑专题不存在，或已经被迁移到新的内容结构中。",
+  });
+
   useEffect(() => {
     if (building && building.modules.length > 0) {
       visitBuilding(building.id);
       setActiveModuleId(building.modules[0].id);
-      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   }, [building, visitBuilding]);
 
@@ -61,7 +69,12 @@ export default function BuildingDetailPage() {
   }, [activeModuleId]);
 
   if (!building || !activeModule) {
-    return <NotFoundState />;
+    return (
+      <NotFoundState
+        title="未找到对应建筑专题"
+        description="当前链接对应的个案不存在，或已被调整到新的策展结构中。你可以返回首页，从专题总览重新进入。"
+      />
+    );
   }
 
   const currentStep = activeModule.steps[activeStep] ?? activeModule.steps[0];
@@ -129,7 +142,11 @@ export default function BuildingDetailPage() {
         </div>
       </header>
 
-      <main className="relative z-10 mx-auto max-w-7xl px-6 pt-8 md:px-8 md:pt-10">
+      <main
+        id="main-content"
+        tabIndex={-1}
+        className="relative z-10 mx-auto max-w-7xl px-6 pt-8 outline-none md:px-8 md:pt-10"
+      >
         <section className="grid gap-8 xl:grid-cols-[1.04fr_0.96fr]">
           <div className="rounded-[2.6rem] border border-white/10 bg-[linear-gradient(180deg,rgba(216,186,105,0.12),rgba(255,255,255,0.03))] p-8 shadow-[var(--shadow-panel-strong)]">
             <div className="flex flex-wrap items-center gap-3">
@@ -588,28 +605,5 @@ function StoryJumpCard({
       <p className="mt-3 text-xl tracking-[0.1em] text-[var(--color-ink-contrast)]">{title}</p>
       <p className="mt-2">{subtitle}</p>
     </Link>
-  );
-}
-
-function NotFoundState() {
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-[var(--color-bg)] px-6">
-      <div className="max-w-lg rounded-[2rem] border border-white/10 bg-white/4 p-8 text-center">
-        <p className="text-xs uppercase tracking-[0.3em] text-[var(--color-gold-soft)]">404</p>
-        <h1 className="mt-4 text-3xl tracking-[0.12em] text-[var(--color-ink-contrast)]">
-          未找到对应建筑专题
-        </h1>
-        <p className="mt-4 text-base leading-8 text-[var(--color-ink-muted)]">
-          当前链接对应的案例不存在，或已被调整到新的内容结构中。
-        </p>
-        <Link
-          to="/"
-          className="mt-8 inline-flex items-center gap-3 rounded-full bg-[var(--color-gold-soft)] px-6 py-3 text-sm tracking-[0.16em] text-[var(--color-bg)]"
-        >
-          <ArrowLeft size={16} />
-          返回首页
-        </Link>
-      </div>
-    </div>
   );
 }
