@@ -138,6 +138,10 @@ export const categoryLabels: Record<BuildingCategory, string> = {
   religious: "宗教建筑",
   garden: "园林",
   residence: "聚居建筑",
+  temple: "寺观",
+  tower: "楼阁",
+  pagoda: "佛塔",
+  bridge: "桥梁",
 };
 
 export const moduleLabels: Record<ModuleId, string> = {

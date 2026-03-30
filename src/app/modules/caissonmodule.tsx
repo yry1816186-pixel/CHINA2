@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ZoomIn, ZoomOut, RotateCcw } from 'lucide-react';
+import { SealStamp, GoldenParticles, GlowPulse } from '../components/CinematicEffects';
 import { BuildingData } from '../types';
 
 interface CaissonModuleProps {
@@ -180,7 +181,8 @@ export default function CaissonModule({ building, onComplete, isCompleted }: Cai
   };
 
   return (
-    <div className="w-full h-full flex">
+    <div className="w-full h-full flex relative">
+      <GoldenParticles count={20} intensity="subtle" />
       <div className="flex-1 flex flex-col items-center justify-center relative">
         <div className="absolute top-4 left-4 text-[#D4AF37]/60 text-sm tracking-[0.3em]">
           仰观藻井 · 递归探索
@@ -233,7 +235,7 @@ export default function CaissonModule({ building, onComplete, isCompleted }: Cai
         </div>
       </div>
 
-      <div className="w-80 border-l border-[#D4AF37]/20 p-6 flex flex-col">
+      <div className="hidden md:flex w-80 border-l border-[#D4AF37]/20 p-6 flex-col">
         <h3 className="text-xl text-[#D4AF37] tracking-[0.3em] mb-6 pb-4 border-b border-[#D4AF37]/20">
           藻井层次
         </h3>
@@ -293,22 +295,12 @@ export default function CaissonModule({ building, onComplete, isCompleted }: Cai
       <AnimatePresence>
         {isComplete && (
           <motion.div
+            className="absolute inset-0 bg-bg-deep/90 flex items-center justify-center z-50"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="absolute inset-0 bg-[#0A1110]/95 flex items-center justify-center z-50"
+            exit={{ opacity: 0 }}
           >
-            <motion.div
-              initial={{ scale: 0, rotate: -180 }}
-              animate={{ scale: 1, rotate: 0 }}
-              transition={{ type: "spring", damping: 15 }}
-              className="text-center"
-            >
-              <div className="w-24 h-24 border-4 border-[#D4AF37] rounded-full flex items-center justify-center mx-auto mb-6">
-                <span className="text-[#D4AF37] text-4xl">饰</span>
-              </div>
-              <h3 className="text-3xl text-[#D4AF37] tracking-[0.5em] mb-4">藻井之饰</h3>
-              <p className="text-[#F5F5DC]/60 tracking-[0.2em]">印记已获得</p>
-            </motion.div>
+            <SealStamp character="饰" />
           </motion.div>
         )}
       </AnimatePresence>

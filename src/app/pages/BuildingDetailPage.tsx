@@ -135,19 +135,20 @@ export default function BuildingDetailPage() {
     >
       <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/rice-paper.png')] opacity-[0.02] pointer-events-none" />
 
-      <header className="absolute top-0 left-0 right-0 h-20 flex items-center justify-between px-8 z-50 bg-gradient-to-b from-[#0A1110] to-transparent">
+      <header className="absolute top-0 left-0 right-0 h-16 md:h-20 flex items-center justify-between px-4 md:px-8 z-50 bg-gradient-to-b from-[#0A1110] to-transparent">
         <motion.button
           whileHover={{ x: -5 }}
           onClick={handleBack}
-          className="flex items-center gap-3 text-gold-500 hover:text-ink-contrast transition-colors cursor-pointer group"
+          aria-label="返回首页"
+          className="flex items-center gap-2 md:gap-3 text-gold-500 hover:text-ink-contrast transition-colors cursor-pointer group"
         >
-          <ArrowLeft size={24} className="group-hover:-translate-x-1 transition-transform" />
-          <span className="tracking-[0.3em]">收卷</span>
+          <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
+          <span className="tracking-[0.3em] text-sm md:text-base">收卷</span>
         </motion.button>
 
-        <div className="flex items-center gap-6">
-          <h1 className="text-2xl text-gold-500 tracking-[0.5em]">{building.name}</h1>
-          <div className="w-12 h-12 border-[2px] border-vermilion-500 border-vermilion-500 flex items-center justify-center rounded-sm shadow-[0_0_20px_rgba(194,53,49,0.25)] bg-vermilion-500/5">
+        <div className="flex items-center gap-3 md:gap-6">
+          <h1 className="text-lg md:text-2xl text-gold-500 tracking-[0.3em] md:tracking-[0.5em]">{building.name}</h1>
+          <div className="hidden md:flex w-12 h-12 border-[2px] border-vermilion-500 border-vermilion-500 items-center justify-center rounded-sm shadow-[0_0_20px_rgba(194,53,49,0.25)] bg-vermilion-500/5">
             <span className="text-sm font-bold [writing-mode:vertical-rl] tracking-widest leading-none" style={{ fontFamily: 'SimSun, serif' }}>
               {building.seal}
             </span>
@@ -156,21 +157,24 @@ export default function BuildingDetailPage() {
 
         <button
           onClick={() => setSoundEnabled(!soundEnabled)}
-          className="p-3 text-gold-500 border border-gold-500/30 hover:bg-gold-500/10 transition-all rounded-sm cursor-pointer"
+          aria-label={soundEnabled ? '关闭音效' : '开启音效'}
+          className="p-2 md:p-3 text-gold-500 border border-gold-500/30 hover:bg-gold-500/10 transition-all rounded-sm cursor-pointer"
         >
-          {soundEnabled ? <Volume2 size={20} /> : <VolumeX size={20} />}
+          {soundEnabled ? <Volume2 size={18} /> : <VolumeX size={18} />}
         </button>
       </header>
 
       {building.modules && building.modules.length > 0 && (
-        <nav className="absolute top-24 left-1/2 -translate-x-1/2 z-40">
+        <nav className="absolute top-16 md:top-24 left-0 right-0 z-40 px-4 md:px-0" role="tablist" aria-label="建筑探索模块">
           <div className="flex flex-col items-center gap-2">
-            <div className="flex gap-2 p-2 bg-bg-panel/80 backdrop-blur-md border border-gold-500/20 rounded-sm">
+            <div className="flex gap-1 md:gap-2 p-1.5 md:p-2 bg-bg-panel/80 backdrop-blur-md border border-gold-500/20 rounded-sm overflow-x-auto max-w-full scrollbar-hide">
               {building.modules.map((module, index) => (
                 <motion.button
                   key={module.id}
                   onClick={() => setActiveModule(module)}
-                  className={`px-6 py-3 text-sm tracking-[0.2em] transition-all relative cursor-pointer ${
+                  role="tab"
+                  aria-selected={activeModule?.id === module.id}
+                  className={`px-3 md:px-6 py-2 md:py-3 text-xs md:text-sm tracking-[0.1em] md:tracking-[0.2em] transition-all relative cursor-pointer whitespace-nowrap ${
                     activeModule?.id === module.id
                       ? 'text-bg-deep bg-gold-500'
                       : 'text-gold-500 hover:bg-gold-500/10'
@@ -213,14 +217,14 @@ export default function BuildingDetailPage() {
         </nav>
       )}
 
-      <main className="absolute inset-0 pt-32 pb-8 px-8">
+      <main id="main-content" role="tabpanel" className="absolute inset-0 pt-28 md:pt-32 pb-4 md:pb-8 px-4 md:px-8">
         <AnimatePresence mode="wait">
           <motion.div
             key={activeModule?.id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.5 }}
+            initial={{ opacity: 0, scale: 1.05 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
             className="w-full h-full"
           >
             {renderModule()}

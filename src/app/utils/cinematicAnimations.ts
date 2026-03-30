@@ -7,7 +7,9 @@
 // 1. 自定义缓动函数 - 电影级动画曲线
 // ============================================
 
-export const easings = {
+type CubicBezier = [number, number, number, number];
+
+export const easings: Record<string, CubicBezier> = {
   cinematic: [0.25, 0.1, 0.25, 1],
   dramatic: [0.6, 0, 0.35, 1],
   bounce: [0.34, 1.56, 0.64, 1],
@@ -29,6 +31,7 @@ export const durations = {
   slow: 0.5,
   slower: 0.8,
   dramatic: 1.2,
+  cinematic: 1,
   epic: 2,
 };
 

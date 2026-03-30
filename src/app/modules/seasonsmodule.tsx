@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
 import { Sun, Cloud, Snowflake, Leaf } from 'lucide-react';
+import { SealStamp, GoldenParticles } from '../components/CinematicEffects';
 import { BuildingData, SEASONS, SeasonConfig } from '../types';
 
 interface SeasonsModuleProps {
@@ -87,7 +88,8 @@ export default function SeasonsModule({ building, onComplete, isCompleted }: Sea
   const Icon = seasonIcons[currentSeason.id];
 
   return (
-    <div className="w-full h-full flex flex-col">
+    <div className="w-full h-full flex flex-col relative">
+      <GoldenParticles count={15} intensity="subtle" />
       <div className="absolute top-4 left-4 text-[#D4AF37]/60 text-sm tracking-[0.3em]">
         四时光影 · 季节流转
       </div>
@@ -272,7 +274,6 @@ export default function SeasonsModule({ building, onComplete, isCompleted }: Sea
                         backgroundColor: seasonColors[season.id].bg,
                         borderColor: seasonColors[season.id].primary,
                         borderWidth: isActive ? 2 : 1,
-                        ringColor: isActive ? seasonColors[season.id].primary : undefined
                       }}
                     >
                       <SeasonIcon 
@@ -311,27 +312,18 @@ export default function SeasonsModule({ building, onComplete, isCompleted }: Sea
         </div>
       </div>
 
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: isComplete ? 1 : 0 }}
-        className="absolute inset-0 bg-[#0A1110]/95 flex items-center justify-center z-50 pointer-events-none"
-        style={{ pointerEvents: isComplete ? 'auto' : 'none' }}
-      >
+      <AnimatePresence>
         {isComplete && (
           <motion.div
-            initial={{ scale: 0, rotate: -180 }}
-            animate={{ scale: 1, rotate: 0 }}
-            transition={{ type: "spring", damping: 15 }}
-            className="text-center"
+            className="absolute inset-0 bg-bg-deep/90 flex items-center justify-center z-50"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
           >
-            <div className="w-24 h-24 border-4 border-[#D4AF37] rounded-full flex items-center justify-center mx-auto mb-6">
-              <span className="text-[#D4AF37] text-4xl">时</span>
-            </div>
-            <h3 className="text-3xl text-[#D4AF37] tracking-[0.5em] mb-4">四时之序</h3>
-            <p className="text-[#F5F5DC]/60 tracking-[0.2em]">印记已获得</p>
+            <SealStamp character="时" />
           </motion.div>
         )}
-      </motion.div>
+      </AnimatePresence>
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { SealStamp, GoldenParticles, GlowPulse } from '../components/CinematicEffects';
 import { BuildingData, RIDGE_BEASTS, RidgeBeast } from '../types';
 
 interface RidgeBeastModuleProps {
@@ -105,7 +106,8 @@ export default function RidgeBeastModule({ building, onComplete, isCompleted }: 
   };
 
   return (
-    <div className="w-full h-full flex flex-col">
+    <div className="w-full h-full flex flex-col relative">
+      <GoldenParticles count={15} intensity="subtle" />
       <div className="absolute top-4 left-4 text-[#D4AF37]/60 text-sm tracking-[0.3em]">
         脊兽行旅 · 屋脊守护
       </div>
@@ -204,7 +206,7 @@ export default function RidgeBeastModule({ building, onComplete, isCompleted }: 
               </p>
             </div>
 
-            <div className="w-48 flex flex-col justify-center items-center border-l border-[#D4AF37]/20 pl-6">
+            <div className="hidden md:flex w-48 flex-col justify-center items-center border-l border-[#D4AF37]/20 pl-6">
               <p className="text-[#D4AF37]/60 text-sm tracking-[0.2em] mb-2">等级</p>
               <div className="flex gap-1">
                 {Array.from({ length: 10 }).map((_, i) => (
@@ -243,22 +245,12 @@ export default function RidgeBeastModule({ building, onComplete, isCompleted }: 
       <AnimatePresence>
         {isComplete && (
           <motion.div
+            className="absolute inset-0 bg-bg-deep/90 flex items-center justify-center z-50"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="absolute inset-0 bg-[#0A1110]/95 flex items-center justify-center z-50"
+            exit={{ opacity: 0 }}
           >
-            <motion.div
-              initial={{ scale: 0, rotate: -180 }}
-              animate={{ scale: 1, rotate: 0 }}
-              transition={{ type: "spring", damping: 15 }}
-              className="text-center"
-            >
-              <div className="w-24 h-24 border-4 border-[#D4AF37] rounded-full flex items-center justify-center mx-auto mb-6">
-                <span className="text-[#D4AF37] text-4xl">形</span>
-              </div>
-              <h3 className="text-3xl text-[#D4AF37] tracking-[0.5em] mb-4">脊兽之形</h3>
-              <p className="text-[#F5F5DC]/60 tracking-[0.2em]">印记已获得</p>
-            </motion.div>
+            <SealStamp character="兽" />
           </motion.div>
         )}
       </AnimatePresence>

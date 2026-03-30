@@ -133,7 +133,7 @@ const PalaceGate3D: React.FC<{
           animate={{
             rotateY: isOpening ? -120 : 0, // 门扇开启
           }}
-          transition={{ duration: durations.cinematic, ease: easings.cinematic }}
+          transition={{ duration: durations.dramatic, ease: easings.cinematic }}
         >
           {/* 门框装饰 */}
           <div 

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { BuildingData } from '../types';
 import { Eye, Move, Camera } from 'lucide-react';
+import { SealStamp, MistEffect, GoldenParticles } from '../components/CinematicEffects';
 
 interface GardenModuleProps {
   building: BuildingData;
@@ -203,7 +204,9 @@ export default function GardenModule({ building, onComplete, isCompleted }: Gard
   };
 
   return (
-    <div className="w-full h-full flex">
+    <div className="w-full h-full flex relative">
+      <MistEffect intensity="light" />
+      <GoldenParticles count={15} intensity="subtle" />
       <div className="flex-1 flex items-center justify-center relative p-8">
         <div className="absolute top-4 left-4 flex items-center gap-2 text-[#D4AF37]">
           <Camera size={20} />
@@ -258,7 +261,7 @@ export default function GardenModule({ building, onComplete, isCompleted }: Gard
         </div>
       </div>
 
-      <div className="w-80 border-l border-[#D4AF37]/20 p-6 flex flex-col">
+      <div className="hidden md:flex w-80 border-l border-[#D4AF37]/20 p-6 flex-col">
         <h3 className="text-xl text-[#D4AF37] tracking-[0.3em] mb-6 pb-4 border-b border-[#D4AF37]/20">
           园林意境
         </h3>
@@ -304,22 +307,12 @@ export default function GardenModule({ building, onComplete, isCompleted }: Gard
       <AnimatePresence>
         {isComplete && (
           <motion.div
+            className="absolute inset-0 bg-bg-deep/90 flex items-center justify-center z-50"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="absolute inset-0 bg-[#0A1110]/95 flex items-center justify-center z-50"
+            exit={{ opacity: 0 }}
           >
-            <motion.div
-              initial={{ scale: 0, rotate: -180 }}
-              animate={{ scale: 1, rotate: 0 }}
-              transition={{ type: "spring", damping: 15 }}
-              className="text-center"
-            >
-              <div className="w-24 h-24 border-4 border-[#D4AF37] rounded-full flex items-center justify-center mx-auto mb-6">
-                <span className="text-[#D4AF37] text-4xl">园</span>
-              </div>
-              <h3 className="text-3xl text-[#D4AF37] tracking-[0.5em] mb-4">园林意境</h3>
-              <p className="text-[#F5F5DC]/60 tracking-[0.2em]">印记已获得</p>
-            </motion.div>
+            <SealStamp character="园" />
           </motion.div>
         )}
       </AnimatePresence>

@@ -65,11 +65,11 @@ export default function FinalePage() {
 
   const sealVariants = {
     hidden: { scale: 0, rotate: -180, opacity: 0 },
-    visible: { 
-      scale: 1, 
-      rotate: 0, 
+    visible: {
+      scale: 1,
+      rotate: 0,
       opacity: 1,
-      transition: { type: "spring", damping: 12, stiffness: 200 }
+      transition: { type: "spring" as const, damping: 12, stiffness: 200 }
     }
   };
 
@@ -127,7 +127,7 @@ export default function FinalePage() {
             </svg>
           </motion.div>
           
-          <h1 className="text-4xl md:text-5xl text-gold-500 tracking-[0.5em] mb-4 font-serif">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl text-gold-500 tracking-[0.3em] md:tracking-[0.5em] mb-4 font-serif">
             营造印卷
           </h1>
           <p className="text-ink-contrast/60 tracking-[0.3em] text-lg">
@@ -243,20 +243,20 @@ export default function FinalePage() {
           transition={{ delay: 1.5 }}
           className="text-center mb-12"
         >
-          <div className="inline-block p-8 bg-gradient-to-br from-[#D4AF37]/10 to-transparent border border-gold-500/20 rounded-lg">
-            <h3 className="text-xl text-gold-500 tracking-[0.4em] mb-4">探索统计</h3>
-            <div className="grid grid-cols-3 gap-8">
+          <div className="inline-block p-4 md:p-8 bg-gradient-to-br from-[#D4AF37]/10 to-transparent border border-gold-500/20 rounded-lg">
+            <h3 className="text-lg md:text-xl text-gold-500 tracking-[0.3em] md:tracking-[0.4em] mb-4">探索统计</h3>
+            <div className="grid grid-cols-3 gap-4 md:gap-8">
               <div>
-                <div className="text-3xl text-gold-500 font-serif mb-1">{visitedBuildings.length}</div>
-                <div className="text-sm text-ink-contrast/50 tracking-[0.2em]">已访建筑</div>
+                <div className="text-2xl md:text-3xl text-gold-500 font-serif mb-1">{visitedBuildings.length}</div>
+                <div className="text-xs md:text-sm text-ink-contrast/50 tracking-[0.1em] md:tracking-[0.2em]">已访建筑</div>
               </div>
               <div>
-                <div className="text-3xl text-gold-500 font-serif mb-1">{earnedCount}</div>
-                <div className="text-sm text-ink-contrast/50 tracking-[0.2em]">获得印记</div>
+                <div className="text-2xl md:text-3xl text-gold-500 font-serif mb-1">{earnedCount}</div>
+                <div className="text-xs md:text-sm text-ink-contrast/50 tracking-[0.1em] md:tracking-[0.2em]">获得印记</div>
               </div>
               <div>
-                <div className="text-3xl text-gold-500 font-serif mb-1">{Math.round(progressPct)}%</div>
-                <div className="text-sm text-ink-contrast/50 tracking-[0.2em]">完成度</div>
+                <div className="text-2xl md:text-3xl text-gold-500 font-serif mb-1">{Math.round(progressPct)}%</div>
+                <div className="text-xs md:text-sm text-ink-contrast/50 tracking-[0.1em] md:tracking-[0.2em]">完成度</div>
               </div>
             </div>
           </div>

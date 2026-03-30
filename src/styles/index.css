@@ -119,3 +119,12 @@ button {
   background: linear-gradient(180deg, rgba(216, 186, 105, 0.56), rgba(197, 108, 73, 0.52));
   background-clip: padding-box;
 }
+
+/* Hide scrollbar for nav tabs on mobile */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
