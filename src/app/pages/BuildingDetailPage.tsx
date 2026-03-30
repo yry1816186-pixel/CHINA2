@@ -1,609 +1,252 @@
-import { useEffect, useMemo, useState, type ReactNode } from "react";
-import { motion, useScroll, useSpring } from "motion/react";
-import {
-  ArrowLeft,
-  ArrowRight,
-  BookMarked,
-  CheckCircle2,
-  ExternalLink,
-  MapPin,
-  ScrollText,
-  ShieldCheck,
-  Sparkles,
-} from "lucide-react";
-import { Link, useParams } from "react-router";
-import NotFoundState from "../components/NotFoundState";
-import ModuleVisualizer from "../components/site/ModuleVisualizer";
-import MonumentIllustration from "../components/site/MonumentIllustration";
-import { buildingsById, buildingsData } from "../data/buildings";
-import { useProgress } from "../context/ProgressContext";
-import usePageMeta from "../hooks/usePageMeta";
-import { getModuleProgressKey, moduleLabels, type ModuleId } from "../types";
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import { useParams, useNavigate } from 'react-router';
+import { ArrowLeft, Volume2, VolumeX } from 'lucide-react';
+import { BuildingData, BuildingModule } from '../types';
+import { buildingsData } from '../data/buildings';
+import { useProgress } from '../context';
+import AxisModule from '../modules/AxisModule';
+import StructureModule from '../modules/StructureModule';
+import DougongModule from '../modules/DougongModule';
+import CaissonModule from '../modules/CaissonModule';
+import SeasonsModule from '../modules/SeasonsModule';
+import RidgeBeastModule from '../modules/RidgeBeastModule';
+import RestorationModule from '../modules/RestorationModule';
+import GardenModule from '../modules/GardenModule';
+import PagodaModule from '../modules/PagodaModule';
+import BridgeModule from '../modules/BridgeModule';
+import DwellingModule from '../modules/DwellingModule';
+import CinematicAxisModuleV2 from '../modules/CinematicAxisModuleV2';
+import CinematicStructureModule from '../modules/CinematicStructureModule';
+import CinematicDougongModuleV2 from '../modules/CinematicDougongModuleV2';
 
 export default function BuildingDetailPage() {
   const { id } = useParams<{ id: string }>();
-  const building = (id && buildingsById[id]) || null;
-  const {
-    progress,
-    visitBuilding,
-    completeModule,
-    earnSeal,
-    hasCompletedModule,
-    hasEarnedSeal,
-    getBuildingProgress,
-  } = useProgress();
-
-  const [activeModuleId, setActiveModuleId] = useState<ModuleId>("axis");
-  const [activeStep, setActiveStep] = useState(0);
-  const { scrollYProgress } = useScroll();
-  const progressScale = useSpring(scrollYProgress, {
-    stiffness: 140,
-    damping: 28,
-    mass: 0.25,
-  });
-
-  usePageMeta({
-    title: building ? `${building.name}专题` : "建筑专题未找到",
-    description: building
-      ? `${building.tagline}。本专题从${building.modules.map((module) => module.title).join("、")}等维度展开，帮助读者理解其文化内核、结构智慧与保护逻辑。`
-      : "当前访问的建筑专题不存在，或已经被迁移到新的内容结构中。",
-  });
+  const navigate = useNavigate();
+  const { completeModule, earnSeal, hasCompletedModule } = useProgress();
+  const [building, setBuilding] = useState<BuildingData | null>(null);
+  const [activeModule, setActiveModule] = useState<BuildingModule | null>(null);
+  const [soundEnabled, setSoundEnabled] = useState(false);
+  const [isExiting, setIsExiting] = useState(false);
 
   useEffect(() => {
-    if (building && building.modules.length > 0) {
-      visitBuilding(building.id);
-      setActiveModuleId(building.modules[0].id);
+    const found = buildingsData.find(b => b.id === id);
+    if (found) {
+      setBuilding(found);
+      if (found.modules && found.modules.length > 0) {
+        setActiveModule(found.modules[0]);
+      }
     }
-  }, [building, visitBuilding]);
+  }, [id]);
 
-  const activeModule = useMemo(() => {
-    if (!building) {
-      return null;
-    }
+  const handleBack = () => {
+    setIsExiting(true);
+    setTimeout(() => {
+      navigate('/');
+    }, 500);
+  };
 
-    return building.modules.find((module) => module.id === activeModuleId) ?? building.modules[0];
-  }, [activeModuleId, building]);
+  const handleModuleComplete = (moduleId: string) => {
+    completeModule(moduleId);
+    
+    const sealMap: Record<string, { type: '形' | '构' | '匠' | '饰' | '时' | '礼' | '守' | '园' | '塔' | '桥' | '居'; name: string }> = {
+      axis: { type: '礼', name: '中轴之礼' },
+      structure: { type: '构', name: '木构之骨' },
+      dougong: { type: '匠', name: '斗栱之匠' },
+      caisson: { type: '饰', name: '藻井之饰' },
+      seasons: { type: '时', name: '四时之序' },
+      ridge: { type: '形', name: '脊兽之形' },
+      restoration: { type: '守', name: '修缮之守' },
+      garden: { type: '园', name: '园林意境' },
+      pagoda: { type: '塔', name: '登临宝塔' },
+      bridge: { type: '桥', name: '古桥遗韵' },
+      dwelling: { type: '居', name: '四时宜居' }
+    };
 
-  useEffect(() => {
-    setActiveStep(0);
-  }, [activeModuleId]);
-
-  if (!building || !activeModule) {
-    return (
-      <NotFoundState
-        title="未找到对应建筑专题"
-        description="当前链接对应的个案不存在，或已被调整到新的策展结构中。你可以返回首页，从专题总览重新进入。"
-      />
-    );
-  }
-
-  const currentStep = activeModule.steps[activeStep] ?? activeModule.steps[0];
-  const moduleKey = getModuleProgressKey(building.id, activeModule.id);
-  const isModuleDone = hasCompletedModule(moduleKey);
-  const isBuildingDone = hasEarnedSeal(building.id);
-  const buildingProgress = getBuildingProgress(building.id, building.modules.length);
-
-  const currentIndex = buildingsData.findIndex((candidate) => candidate.id === building.id);
-  const previousBuilding = currentIndex > 0 ? buildingsData[currentIndex - 1] : null;
-  const nextBuilding = currentIndex < buildingsData.length - 1 ? buildingsData[currentIndex + 1] : null;
-
-  const relatedCases = buildingsData.filter(
-    (candidate) => candidate.id !== building.id && candidate.category === building.category,
-  );
-
-  const handleCompleteModule = () => {
-    if (isModuleDone) {
-      return;
-    }
-
-    const nextCompleted = new Set(progress.completedModules);
-    nextCompleted.add(moduleKey);
-    completeModule(moduleKey);
-
-    const isAllDone = building.modules.every((module) =>
-      nextCompleted.has(getModuleProgressKey(building.id, module.id)),
-    );
-
-    if (isAllDone && !isBuildingDone) {
+    const sealInfo = sealMap[moduleId];
+    if (sealInfo && !hasCompletedModule(moduleId)) {
       earnSeal({
-        id: building.id,
-        name: `${building.name}专题藏印`,
-        description: `已完成 ${building.name} 的全部主题模块浏览与记录。`,
+        id: `${building?.id}-${moduleId}`,
+        name: sealInfo.name,
+        type: sealInfo.type,
+        earned: true,
+        earnedAt: Date.now(),
+        description: `完成${building?.name}的${sealInfo.name}探索`
       });
     }
   };
 
+  const renderModule = () => {
+    if (!building || !activeModule) return null;
+
+    const props = {
+      building,
+      onComplete: () => handleModuleComplete(activeModule.id),
+      isCompleted: hasCompletedModule(activeModule.id)
+    };
+
+    switch (activeModule.id) {
+      case 'axis':
+        return <CinematicAxisModuleV2 {...props} />;
+      case 'structure':
+        return <CinematicStructureModule {...props} />;
+      case 'dougong':
+        return <CinematicDougongModuleV2 {...props} />;
+      case 'caisson':
+        return <CaissonModule {...props} />;
+      case 'seasons':
+        return <SeasonsModule {...props} />;
+      case 'ridge':
+        return <RidgeBeastModule {...props} />;
+      case 'restoration':
+        return <RestorationModule {...props} />;
+      case 'garden':
+        return <GardenModule {...props} />;
+      case 'pagoda':
+        return <PagodaModule {...props} />;
+      case 'bridge':
+        return <BridgeModule {...props} />;
+      case 'dwelling':
+        return <DwellingModule {...props} />;
+      default:
+        return null;
+    }
+  };
+
+  if (!building) {
+    return (
+      <div className="w-screen h-screen bg-[#0A1110] flex items-center justify-center">
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+          className="w-12 h-12 border-2 border-[#D4AF37] border-t-transparent rounded-full"
+        />
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-[var(--color-bg)] pb-20">
-      <motion.div
-        style={{ scaleX: progressScale }}
-        className="fixed left-0 right-0 top-0 z-50 h-[3px] origin-left bg-[linear-gradient(90deg,var(--color-gold-soft),var(--color-accent),var(--color-sky))]"
-      />
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(216,186,105,0.14),transparent_24%),radial-gradient(circle_at_bottom_right,rgba(104,156,183,0.12),transparent_28%)]" />
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="w-screen h-screen bg-[#0A1110] text-[#F5F5DC] font-serif overflow-hidden relative"
+      style={{ fontFamily: "'Noto Serif SC', serif" }}
+    >
+      <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/rice-paper.png')] opacity-[0.02] pointer-events-none" />
 
-      <header className="sticky top-0 z-40 border-b border-white/8 bg-[rgba(10,16,17,0.82)] backdrop-blur-xl">
-        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-4 md:px-8">
-          <Link
-            to="/"
-            className="inline-flex items-center gap-3 text-sm tracking-[0.16em] text-[var(--color-ink-contrast)] transition hover:text-[var(--color-gold-soft)]"
-          >
-            <ArrowLeft size={16} />
-            返回专题总览
-          </Link>
+      <header className="absolute top-0 left-0 right-0 h-20 flex items-center justify-between px-8 z-50 bg-gradient-to-b from-[#0A1110] to-transparent">
+        <motion.button
+          whileHover={{ x: -5 }}
+          onClick={handleBack}
+          className="flex items-center gap-3 text-[#D4AF37] hover:text-[#F5F5DC] transition-colors cursor-pointer group"
+        >
+          <ArrowLeft size={24} className="group-hover:-translate-x-1 transition-transform" />
+          <span className="tracking-[0.3em]">收卷</span>
+        </motion.button>
 
-          <div className="text-right">
-            <p className="text-xs uppercase tracking-[0.3em] text-[var(--color-gold-soft)]">
-              {moduleLabels[activeModule.id]}
-            </p>
-            <p className="mt-1 text-sm tracking-[0.14em] text-[var(--color-ink-soft)]">
-              {isBuildingDone ? "专题已完成" : "专题进行中"}
-            </p>
+        <div className="flex items-center gap-6">
+          <h1 className="text-2xl text-[#D4AF37] tracking-[0.5em]">{building.name}</h1>
+          <div className="w-12 h-12 border-[2px] border-[#C23531] text-[#C23531] flex items-center justify-center rounded-sm shadow-[0_0_20px_rgba(194,53,49,0.25)] bg-[#C23531]/5">
+            <span className="text-sm font-bold [writing-mode:vertical-rl] tracking-widest leading-none" style={{ fontFamily: 'SimSun, serif' }}>
+              {building.seal}
+            </span>
           </div>
         </div>
+
+        <button
+          onClick={() => setSoundEnabled(!soundEnabled)}
+          className="p-3 text-[#D4AF37] border border-[#D4AF37]/30 hover:bg-[#D4AF37]/10 transition-all rounded-sm cursor-pointer"
+        >
+          {soundEnabled ? <Volume2 size={20} /> : <VolumeX size={20} />}
+        </button>
       </header>
 
-      <main
-        id="main-content"
-        tabIndex={-1}
-        className="relative z-10 mx-auto max-w-7xl px-6 pt-8 outline-none md:px-8 md:pt-10"
-      >
-        <section className="grid gap-8 xl:grid-cols-[1.04fr_0.96fr]">
-          <div className="rounded-[2.6rem] border border-white/10 bg-[linear-gradient(180deg,rgba(216,186,105,0.12),rgba(255,255,255,0.03))] p-8 shadow-[var(--shadow-panel-strong)]">
-            <div className="flex flex-wrap items-center gap-3">
-              <span className="inline-flex items-center gap-3 rounded-full border border-white/12 bg-white/4 px-4 py-2 text-xs tracking-[0.24em] text-[var(--color-gold-soft)]">
-                <BookMarked size={14} />
-                {building.englishName}
-              </span>
-              <span className="rounded-full border border-white/10 px-4 py-2 text-xs tracking-[0.18em] text-[var(--color-ink-soft)]">
-                {building.dynasty}
-              </span>
-            </div>
-
-            <h1 className="mt-7 text-4xl tracking-[0.12em] text-[var(--color-ink-contrast)] md:text-6xl">
-              {building.name}
-            </h1>
-            <p className="mt-4 max-w-3xl text-xl leading-9 text-[var(--color-ink-muted)]">
-              {building.tagline}
-            </p>
-
-            <div className="mt-6 flex flex-wrap items-center gap-3 text-sm tracking-[0.14em] text-[var(--color-ink-soft)]">
-              <span className="inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2">
-                <MapPin size={14} />
-                {building.location}
-              </span>
-              {isBuildingDone && (
-                <span className="inline-flex items-center gap-2 rounded-full border border-[var(--color-accent)]/30 bg-[var(--color-accent)]/10 px-4 py-2 text-[var(--color-accent)]">
-                  <CheckCircle2 size={14} />
-                  已获得专题藏印
-                </span>
-              )}
-            </div>
-
-            <p className="mt-8 text-base leading-8 text-[var(--color-ink-muted)]">
-              {building.overview}
-            </p>
-
-            <div className="mt-8 grid gap-4 md:grid-cols-3">
-              {building.metrics.map((metric) => (
-                <div
-                  key={metric.label}
-                  className="rounded-[1.5rem] border border-white/8 bg-black/12 px-5 py-4"
+      {building.modules && building.modules.length > 0 && (
+        <nav className="absolute top-24 left-1/2 -translate-x-1/2 z-40">
+          <div className="flex flex-col items-center gap-2">
+            <div className="flex gap-2 p-2 bg-[#0B120F]/80 backdrop-blur-md border border-[#D4AF37]/20 rounded-sm">
+              {building.modules.map((module, index) => (
+                <motion.button
+                  key={module.id}
+                  onClick={() => setActiveModule(module)}
+                  className={`px-6 py-3 text-sm tracking-[0.2em] transition-all relative cursor-pointer ${
+                    activeModule?.id === module.id
+                      ? 'text-[#0A1110] bg-[#D4AF37]'
+                      : 'text-[#D4AF37] hover:bg-[#D4AF37]/10'
+                  }`}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                 >
-                  <p className="text-[11px] uppercase tracking-[0.22em] text-[var(--color-ink-soft)]">
-                    {metric.label}
-                  </p>
-                  <p className="mt-2 text-sm tracking-[0.12em] text-[var(--color-ink-contrast)]">
-                    {metric.value}
-                  </p>
-                  <p className="mt-2 text-sm leading-7 text-[var(--color-ink-muted)]">
-                    {metric.description}
-                  </p>
-                </div>
+                  <span className="relative z-10">{module.title}</span>
+                  {hasCompletedModule(module.id) && (
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      className="absolute -top-1 -right-1 w-3 h-3 bg-[#C23531] rounded-full shadow-[0_0_8px_rgba(194,53,49,0.6)]"
+                    />
+                  )}
+                </motion.button>
               ))}
             </div>
-          </div>
-
-          <div className="overflow-hidden rounded-[2.6rem] border border-white/10 bg-[rgba(255,255,255,0.04)] p-6 shadow-[var(--shadow-panel)]">
-            <div className="flex items-center justify-between gap-4">
-              <div>
-                <p className="text-xs uppercase tracking-[0.3em] text-[var(--color-gold-soft)]">
-                  Spatial Stage
-                </p>
-                <p className="mt-2 text-sm leading-7 text-[var(--color-ink-soft)]">
-                  当前阅读围绕建筑轮廓、结构关系和叙事节点同步展开。
-                </p>
+            <div className="flex items-center gap-2">
+              <div className="flex gap-1">
+                {building.modules.map((module) => (
+                  <motion.div
+                    key={module.id}
+                    className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                      hasCompletedModule(module.id) 
+                        ? 'bg-[#C23531] shadow-[0_0_6px_rgba(194,53,49,0.5)]' 
+                        : 'bg-[#D4AF37]/30'
+                    }`}
+                    animate={{
+                      scale: activeModule?.id === module.id ? 1.3 : 1,
+                    }}
+                  />
+                ))}
               </div>
-              <span className="rounded-full border border-white/10 bg-white/4 px-3 py-1 text-xs tracking-[0.18em] text-[var(--color-ink-soft)]">
-                {buildingProgress.completed}/{buildingProgress.total}
+              <span className="text-xs text-[#D4AF37]/60 tracking-wider">
+                {building.modules.filter(m => hasCompletedModule(m.id)).length}/{building.modules.length}
               </span>
             </div>
-
-            <div className="mt-6 rounded-[2rem] border border-white/8 bg-[rgba(255,255,255,0.03)] p-5">
-              <MonumentIllustration
-                kind={building.illustration}
-                palette={building.palette}
-                className="h-[24rem] w-full"
-              />
-            </div>
-
-            <div className="mt-6 rounded-[1.8rem] border border-white/8 bg-black/14 px-5 py-5">
-              <div className="flex items-center justify-between gap-4">
-                <p className="text-xs uppercase tracking-[0.28em] text-[var(--color-gold-soft)]">
-                  阅读进度
-                </p>
-                <p className="text-sm tracking-[0.16em] text-[var(--color-ink-soft)]">
-                  {Math.round(buildingProgress.ratio * 100)}%
-                </p>
-              </div>
-              <div className="mt-4 h-2 rounded-full bg-white/8">
-                <div
-                  className="h-full rounded-full bg-[linear-gradient(90deg,var(--color-gold-soft),var(--color-accent))]"
-                  style={{ width: `${buildingProgress.ratio * 100}%` }}
-                />
-              </div>
-              <div className="mt-5 grid gap-3 md:grid-cols-2">
-                <div className="rounded-[1.2rem] border border-white/8 bg-white/4 px-4 py-4">
-                  <p className="text-xs tracking-[0.18em] text-[var(--color-ink-soft)]">当前模块</p>
-                  <p className="mt-2 text-base tracking-[0.1em] text-[var(--color-ink-contrast)]">
-                    {activeModule.title}
-                  </p>
-                </div>
-                <div className="rounded-[1.2rem] border border-white/8 bg-white/4 px-4 py-4">
-                  <p className="text-xs tracking-[0.18em] text-[var(--color-ink-soft)]">当前步骤</p>
-                  <p className="mt-2 text-base tracking-[0.1em] text-[var(--color-ink-contrast)]">
-                    {currentStep.title}
-                  </p>
-                </div>
-              </div>
-            </div>
           </div>
-        </section>
+        </nav>
+      )}
 
-        <section className="mt-10 grid gap-8 xl:grid-cols-[300px_minmax(0,1fr)]">
-          <aside className="space-y-5 xl:sticky xl:top-28 xl:h-fit">
-            <div className="rounded-[2rem] border border-white/10 bg-[rgba(255,255,255,0.04)] p-5 shadow-[var(--shadow-panel)]">
-              <div className="flex items-center gap-3 text-xs uppercase tracking-[0.3em] text-[var(--color-gold-soft)]">
-                <ScrollText size={14} />
-                章节导航
-              </div>
-              <div className="mt-5 space-y-3">
-                {building.modules.map((module, index) => {
-                  const currentModuleKey = getModuleProgressKey(building.id, module.id);
-                  const moduleDone = hasCompletedModule(currentModuleKey);
-                  const isActive = module.id === activeModule.id;
-
-                  return (
-                    <button
-                      key={module.id}
-                      type="button"
-                      onClick={() => setActiveModuleId(module.id)}
-                      className={`w-full rounded-[1.5rem] border px-4 py-4 text-left transition ${
-                        isActive
-                          ? "border-[var(--color-gold-soft)] bg-[rgba(216,186,105,0.12)]"
-                          : "border-white/8 bg-black/12 hover:bg-white/4"
-                      }`}
-                    >
-                      <div className="flex items-start justify-between gap-3">
-                        <div>
-                          <p className="text-xs tracking-[0.22em] text-[var(--color-gold-soft)]">
-                            0{index + 1}
-                          </p>
-                          <p className="mt-2 text-sm tracking-[0.12em] text-[var(--color-ink-contrast)]">
-                            {module.title}
-                          </p>
-                          <p className="mt-2 text-sm leading-7 text-[var(--color-ink-muted)]">
-                            {module.strapline}
-                          </p>
-                        </div>
-                        {moduleDone && (
-                          <CheckCircle2 size={17} className="text-[var(--color-accent)]" />
-                        )}
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            <div className="rounded-[2rem] border border-white/10 bg-[rgba(255,255,255,0.04)] p-5">
-              <div className="flex items-center gap-3 text-xs uppercase tracking-[0.3em] text-[var(--color-gold-soft)]">
-                <ShieldCheck size={14} />
-                当前阅读焦点
-              </div>
-              <p className="mt-4 text-base tracking-[0.1em] text-[var(--color-ink-contrast)]">
-                {currentStep.title}
-              </p>
-              <p className="mt-3 text-sm leading-7 text-[var(--color-ink-muted)]">
-                {currentStep.detail}
-              </p>
-              {currentStep.emphasis && (
-                <p className="mt-3 rounded-[1.2rem] border border-[var(--color-gold-soft)]/18 bg-[var(--color-panel-warm)] px-4 py-4 text-sm leading-7 text-[var(--color-ink-contrast)]">
-                  {currentStep.emphasis}
-                </p>
-              )}
-            </div>
-          </aside>
-
-          <div className="space-y-8">
-            <section className="rounded-[2.2rem] border border-white/10 bg-[rgba(255,255,255,0.04)] p-6 shadow-[var(--shadow-panel)]">
-              <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
-                <div>
-                  <p className="text-xs uppercase tracking-[0.3em] text-[var(--color-gold-soft)]">
-                    Current Chapter
-                  </p>
-                  <h2 className="mt-3 text-3xl tracking-[0.12em] text-[var(--color-ink-contrast)]">
-                    {activeModule.title}
-                  </h2>
-                  <p className="mt-3 max-w-3xl text-base leading-8 text-[var(--color-ink-muted)]">
-                    {activeModule.summary}
-                  </p>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={handleCompleteModule}
-                  className={`inline-flex items-center justify-center gap-3 rounded-full px-5 py-3 text-sm tracking-[0.16em] transition ${
-                    isModuleDone
-                      ? "border border-[var(--color-accent)]/30 bg-[var(--color-accent)]/10 text-[var(--color-accent)]"
-                      : "bg-[var(--color-gold-soft)] text-[var(--color-bg)] hover:brightness-105"
-                  }`}
-                >
-                  <CheckCircle2 size={16} />
-                  {isModuleDone ? "本模块已记录" : "记录本模块"}
-                </button>
-              </div>
-
-              <div className="mt-6 flex flex-wrap gap-3">
-                {activeModule.takeaways.map((item) => (
-                  <span
-                    key={item}
-                    className="rounded-full border border-white/8 bg-black/12 px-4 py-2 text-sm leading-7 text-[var(--color-ink-muted)]"
-                  >
-                    {item}
-                  </span>
-                ))}
-              </div>
-            </section>
-
-            <section className="grid gap-8 lg:grid-cols-[1.02fr_0.98fr]">
-              <div className="space-y-6">
-                <div className="rounded-[2rem] border border-white/10 bg-[rgba(255,255,255,0.04)] p-6">
-                  <p className="text-xs uppercase tracking-[0.3em] text-[var(--color-gold-soft)]">
-                    核心步骤
-                  </p>
-                  <h3 className="mt-3 text-2xl tracking-[0.1em] text-[var(--color-ink-contrast)]">
-                    按顺序拆解这一章的理解路径
-                  </h3>
-
-                  <div className="mt-6 space-y-4">
-                    {activeModule.steps.map((step, index) => {
-                      const isActive = index === activeStep;
-                      return (
-                        <button
-                          key={step.title}
-                          type="button"
-                          onClick={() => setActiveStep(index)}
-                          className={`w-full rounded-[1.5rem] border px-5 py-5 text-left transition ${
-                            isActive
-                              ? "border-[var(--color-gold-soft)] bg-[rgba(216,186,105,0.12)]"
-                              : "border-white/8 bg-black/12 hover:bg-white/4"
-                          }`}
-                        >
-                          <div className="flex items-start justify-between gap-4">
-                            <div>
-                              <p className="text-sm tracking-[0.18em] text-[var(--color-gold-soft)]">
-                                {step.title}
-                              </p>
-                              <p className="mt-2 text-sm leading-7 text-[var(--color-ink-muted)]">
-                                {step.detail}
-                              </p>
-                              {step.emphasis && (
-                                <p className="mt-3 text-sm leading-7 text-[var(--color-ink-contrast)]">
-                                  {step.emphasis}
-                                </p>
-                              )}
-                            </div>
-                            <span className="rounded-full border border-white/10 px-3 py-1 text-xs tracking-[0.18em] text-[var(--color-ink-soft)]">
-                              0{index + 1}
-                            </span>
-                          </div>
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                <div className="rounded-[2rem] border border-white/10 bg-[rgba(255,255,255,0.04)] p-6">
-                  <p className="text-xs uppercase tracking-[0.3em] text-[var(--color-gold-soft)]">
-                    关键事实
-                  </p>
-                  <div className="mt-5 grid gap-4 md:grid-cols-2">
-                    {activeModule.facts.map((fact) => (
-                      <div
-                        key={fact.label}
-                        className="rounded-[1.5rem] border border-white/8 bg-black/12 px-5 py-4"
-                      >
-                        <p className="text-[11px] uppercase tracking-[0.22em] text-[var(--color-ink-soft)]">
-                          {fact.label}
-                        </p>
-                        <p className="mt-2 text-base tracking-[0.1em] text-[var(--color-ink-contrast)]">
-                          {fact.value}
-                        </p>
-                        <p className="mt-2 text-sm leading-7 text-[var(--color-ink-muted)]">
-                          {fact.description}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              <div className="space-y-6 lg:sticky lg:top-28 lg:h-fit">
-                <ModuleVisualizer
-                  module={activeModule}
-                  activeStep={activeStep}
-                  onStepSelect={setActiveStep}
-                />
-
-                <div className="rounded-[2rem] border border-white/10 bg-[rgba(255,255,255,0.04)] p-6">
-                  <div className="flex items-center gap-3 text-xs uppercase tracking-[0.3em] text-[var(--color-gold-soft)]">
-                    <Sparkles size={14} />
-                    当前步骤摘要
-                  </div>
-                  <p className="mt-4 text-2xl tracking-[0.1em] text-[var(--color-ink-contrast)]">
-                    {currentStep.title}
-                  </p>
-                  <p className="mt-3 text-sm leading-8 text-[var(--color-ink-muted)]">
-                    {currentStep.detail}
-                  </p>
-                  {currentStep.emphasis && (
-                    <p className="mt-4 rounded-[1.4rem] border border-[var(--color-gold-soft)]/18 bg-[var(--color-panel-warm)] px-4 py-4 text-sm leading-7 text-[var(--color-ink-contrast)]">
-                      {currentStep.emphasis}
-                    </p>
-                  )}
-                </div>
-              </div>
-            </section>
-
-            <section className="rounded-[2rem] border border-white/10 bg-[rgba(255,255,255,0.04)] p-6">
-              <p className="text-xs uppercase tracking-[0.3em] text-[var(--color-gold-soft)]">
-                这个案例值得记住什么
-              </p>
-              <div className="mt-5 grid gap-4 lg:grid-cols-3">
-                {building.significance.map((item) => (
-                  <div
-                    key={item}
-                    className="rounded-[1.5rem] border border-white/8 bg-black/12 px-5 py-4 text-sm leading-7 text-[var(--color-ink-muted)]"
-                  >
-                    {item}
-                  </div>
-                ))}
-              </div>
-            </section>
-
-            <section className="grid gap-8 lg:grid-cols-[0.94fr_1.06fr]">
-              <div className="rounded-[2rem] border border-white/10 bg-[rgba(255,255,255,0.04)] p-6">
-                <p className="text-xs uppercase tracking-[0.3em] text-[var(--color-gold-soft)]">
-                  历史节点
-                </p>
-                <div className="mt-5 space-y-4">
-                  {building.timeline.map((item) => (
-                    <div
-                      key={`${item.era}-${item.title}`}
-                      className="rounded-[1.4rem] border border-white/8 bg-black/12 px-5 py-4"
-                    >
-                      <div className="flex items-baseline gap-4">
-                        <span className="text-sm tracking-[0.22em] text-[var(--color-gold-soft)]">
-                          {item.era}
-                        </span>
-                        <h3 className="text-base tracking-[0.1em] text-[var(--color-ink-contrast)]">
-                          {item.title}
-                        </h3>
-                      </div>
-                      <p className="mt-2 text-sm leading-7 text-[var(--color-ink-muted)]">
-                        {item.description}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="rounded-[2rem] border border-white/10 bg-[rgba(255,255,255,0.04)] p-6">
-                <p className="text-xs uppercase tracking-[0.3em] text-[var(--color-gold-soft)]">
-                  史实依据
-                </p>
-                <div className="mt-5 space-y-3">
-                  {building.sources.map((source) => (
-                    <a
-                      key={source.url}
-                      href={source.url}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="flex items-center justify-between rounded-[1.4rem] border border-white/8 bg-black/12 px-5 py-4 text-sm tracking-[0.12em] text-[var(--color-ink-contrast)] transition hover:border-[var(--color-gold-soft)]/35 hover:bg-white/4"
-                    >
-                      <span>{source.label}</span>
-                      <ExternalLink size={16} className="text-[var(--color-gold-soft)]" />
-                    </a>
-                  ))}
-                </div>
-              </div>
-            </section>
-
-            {(relatedCases.length > 0 || previousBuilding || nextBuilding) && (
-              <section className="grid gap-8 lg:grid-cols-[1fr_auto]">
-                <div className="rounded-[2rem] border border-white/10 bg-[rgba(255,255,255,0.04)] p-6">
-                  <p className="text-xs uppercase tracking-[0.3em] text-[var(--color-gold-soft)]">
-                    同类型延伸阅读
-                  </p>
-                  <div className="mt-5 grid gap-4 md:grid-cols-2">
-                    {relatedCases.map((caseItem) => (
-                      <Link
-                        key={caseItem.id}
-                        to={`/building/${caseItem.id}`}
-                        className="rounded-[1.4rem] border border-white/8 bg-black/12 px-5 py-4 text-sm leading-7 text-[var(--color-ink-muted)] transition hover:border-[var(--color-gold-soft)]/35 hover:bg-white/4"
-                      >
-                        <p className="text-base tracking-[0.12em] text-[var(--color-ink-contrast)]">
-                          {caseItem.name}
-                        </p>
-                        <p className="mt-2">{caseItem.tagline}</p>
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-1 lg:self-start">
-                  {previousBuilding && (
-                    <StoryJumpCard
-                      direction="上一例"
-                      title={previousBuilding.name}
-                      subtitle={previousBuilding.tagline}
-                      to={`/building/${previousBuilding.id}`}
-                      icon={<ArrowLeft size={16} />}
-                    />
-                  )}
-                  {nextBuilding && (
-                    <StoryJumpCard
-                      direction="下一例"
-                      title={nextBuilding.name}
-                      subtitle={nextBuilding.tagline}
-                      to={`/building/${nextBuilding.id}`}
-                      icon={<ArrowRight size={16} />}
-                    />
-                  )}
-                </div>
-              </section>
-            )}
-          </div>
-        </section>
+      <main className="absolute inset-0 pt-32 pb-8 px-8">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeModule?.id}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.5 }}
+            className="w-full h-full"
+          >
+            {renderModule()}
+          </motion.div>
+        </AnimatePresence>
       </main>
-    </div>
-  );
-}
 
-function StoryJumpCard({
-  direction,
-  title,
-  subtitle,
-  to,
-  icon,
-}: {
-  direction: string;
-  title: string;
-  subtitle: string;
-  to: string;
-  icon: ReactNode;
-}) {
-  return (
-    <Link
-      to={to}
-      className="rounded-[1.8rem] border border-white/10 bg-[linear-gradient(180deg,rgba(216,186,105,0.1),rgba(255,255,255,0.03))] px-5 py-5 text-sm leading-7 text-[var(--color-ink-muted)] transition hover:border-[var(--color-gold-soft)]/35 hover:bg-[rgba(216,186,105,0.08)]"
-    >
-      <div className="flex items-center gap-3 text-xs uppercase tracking-[0.28em] text-[var(--color-gold-soft)]">
-        {icon}
-        {direction}
-      </div>
-      <p className="mt-3 text-xl tracking-[0.1em] text-[var(--color-ink-contrast)]">{title}</p>
-      <p className="mt-2">{subtitle}</p>
-    </Link>
+      <AnimatePresence>
+        {isExiting && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[200] bg-[#0A1110] flex items-center justify-center"
+          >
+            <motion.div
+              initial={{ scale: 1, rotate: 0 }}
+              animate={{ scale: 0, rotate: 180 }}
+              transition={{ duration: 0.5 }}
+              className="w-24 h-24 border-4 border-[#D4AF37] rounded-full flex items-center justify-center"
+            >
+              <span className="text-[#D4AF37] text-2xl tracking-[0.5em]">收</span>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
   );
 }
