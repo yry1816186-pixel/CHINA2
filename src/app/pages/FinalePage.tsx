@@ -19,21 +19,23 @@ const SEAL_STAMPS: SealStamp[] = [
   { id: 'dougong', name: '斗栱营造', character: '匠', description: '完成斗栱构件的拼装学习', earned: false },
   { id: 'caisson', name: '藻井仰观', character: '饰', description: '探索藻井的纹样与象征意义', earned: false },
   { id: 'seasons', name: '四时光影', character: '时', description: '感受建筑与季节光影的关系', earned: false },
-  { id: 'ridgebeast', name: '脊兽行旅', character: '礼', description: '了解屋脊神兽的等级与寓意', earned: false },
+  { id: 'ridge', name: '脊兽行旅', character: '兽', description: '了解屋脊神兽的等级与寓意', earned: false },
   { id: 'restoration', name: '修缮守护', character: '守', description: '学习古建筑保护与修缮知识', earned: false },
+  { id: 'garden', name: '园林意境', character: '园', description: '领略中国古典园林的空间哲学', earned: false },
+  { id: 'pagoda', name: '佛塔登临', character: '塔', description: '探索佛塔建筑的形制演变', earned: false },
+  { id: 'bridge', name: '古桥遗韵', character: '桥', description: '了解古代桥梁的建筑智慧', earned: false },
+  { id: 'dwelling', name: '民居四时', character: '居', description: '体验传统民居的生活空间', earned: false },
 ];
 
 export default function FinalePage() {
-  const { visitedBuildings, completedModules } = useProgress();
+  const { progress, visitedBuildings, completedModules, resetProgress } = useProgress();
   const [seals, setSeals] = useState<SealStamp[]>(SEAL_STAMPS);
   const [showCompletion, setShowCompletion] = useState(false);
   const [selectedSeal, setSelectedSeal] = useState<SealStamp | null>(null);
 
   useEffect(() => {
     const updatedSeals = SEAL_STAMPS.map(seal => {
-      const isEarned = Object.values(completedModules).some(modules => 
-        modules.includes(seal.id)
-      );
+      const isEarned = completedModules.includes(seal.id);
       return {
         ...seal,
         earned: isEarned,
@@ -49,7 +51,7 @@ export default function FinalePage() {
   }, [completedModules]);
 
   const earnedCount = seals.filter(s => s.earned).length;
-  const progress = (earnedCount / SEAL_STAMPS.length) * 100;
+  const progressPct = (earnedCount / SEAL_STAMPS.length) * 100;
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -72,13 +74,13 @@ export default function FinalePage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0A1110] text-[#F5F5DC] overflow-hidden relative">
+    <div className="min-h-screen bg-bg-deep text-ink-contrast overflow-hidden relative">
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-0 left-0 w-full h-full opacity-5">
           {Array.from({ length: 20 }).map((_, i) => (
             <motion.div
               key={i}
-              className="absolute text-[#D4AF37] text-6xl font-serif"
+              className="absolute text-gold-500 text-6xl font-serif"
               style={{
                 left: `${(i % 5) * 25}%`,
                 top: `${Math.floor(i / 5) * 25}%`,
@@ -115,20 +117,20 @@ export default function FinalePage() {
             <svg viewBox="0 0 120 120" className="w-24 h-24">
               <defs>
                 <linearGradient id="sealGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#D4AF37"/>
-                  <stop offset="100%" stopColor="#B8960C"/>
+                  <stop offset="0%" stopColor="var(--gold-500)"/>
+                  <stop offset="100%" stopColor="var(--gold-600)"/>
                 </linearGradient>
               </defs>
               <rect x="10" y="10" width="100" height="100" fill="none" stroke="url(#sealGrad)" strokeWidth="3" rx="4"/>
               <rect x="15" y="15" width="90" height="90" fill="none" stroke="url(#sealGrad)" strokeWidth="1" rx="2"/>
-              <text x="60" y="70" textAnchor="middle" fill="#D4AF37" fontSize="36" fontFamily="'Noto Serif SC', serif">印卷</text>
+              <text x="60" y="70" textAnchor="middle" fill="var(--gold-500)" fontSize="36" fontFamily="'Noto Serif SC', serif">印卷</text>
             </svg>
           </motion.div>
           
-          <h1 className="text-4xl md:text-5xl text-[#D4AF37] tracking-[0.5em] mb-4 font-serif">
+          <h1 className="text-4xl md:text-5xl text-gold-500 tracking-[0.5em] mb-4 font-serif">
             营造印卷
           </h1>
-          <p className="text-[#F5F5DC]/60 tracking-[0.3em] text-lg">
+          <p className="text-ink-contrast/60 tracking-[0.3em] text-lg">
             记录您在中国古代建筑世界中的探索足迹
           </p>
         </motion.header>
@@ -140,16 +142,16 @@ export default function FinalePage() {
           className="mb-12"
         >
           <div className="flex items-center justify-center gap-6 mb-4">
-            <span className="text-[#D4AF37]/80 tracking-[0.2em]">探索进度</span>
-            <div className="w-64 h-2 bg-[#D4AF37]/20 rounded-full overflow-hidden">
+            <span className="text-gold-500/80 tracking-[0.2em]">探索进度</span>
+            <div className="w-64 h-2 bg-gold-500/20 rounded-full overflow-hidden">
               <motion.div
                 className="h-full bg-gradient-to-r from-[#D4AF37] to-[#C23531]"
                 initial={{ width: 0 }}
-                animate={{ width: `${progress}%` }}
+                animate={{ width: `${progressPct}%` }}
                 transition={{ delay: 0.8, duration: 1 }}
               />
             </div>
-            <span className="text-[#D4AF37] tracking-[0.2em]">{earnedCount} / {SEAL_STAMPS.length}</span>
+            <span className="text-gold-500 tracking-[0.2em]">{earnedCount} / {SEAL_STAMPS.length}</span>
           </div>
         </motion.div>
 
@@ -168,8 +170,8 @@ export default function FinalePage() {
             >
               <div className={`aspect-square flex items-center justify-center rounded-lg transition-all duration-500 ${
                 seal.earned 
-                  ? 'bg-gradient-to-br from-[#C23531]/20 to-[#D4AF37]/10 border-2 border-[#D4AF37]/50 hover:border-[#D4AF37] hover:shadow-lg hover:shadow-[#D4AF37]/20' 
-                  : 'bg-[#1A1A1A]/50 border border-[#D4AF37]/10'
+                  ? 'bg-gradient-to-br from-[#C23531]/20 to-[#D4AF37]/10 border-2 border-gold-500/50 hover:border-gold-500 hover:shadow-lg hover:shadow-[#D4AF37]/20' 
+                  : 'bg-bg-muted/50 border border-gold-500/10'
               }`}>
                 {seal.earned ? (
                   <motion.div
@@ -194,7 +196,7 @@ export default function FinalePage() {
                         x="50"
                         y="60"
                         textAnchor="middle"
-                        fill="#D4AF37"
+                        fill="var(--gold-500)"
                         fontSize="32"
                         fontFamily="'Noto Serif SC', serif"
                         fontWeight="bold"
@@ -207,14 +209,14 @@ export default function FinalePage() {
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ delay: index * 0.1 + 1 }}
-                      className="absolute -top-1 -right-1 w-4 h-4 bg-[#D4AF37] rounded-full flex items-center justify-center"
+                      className="absolute -top-1 -right-1 w-4 h-4 bg-gold-500 rounded-full flex items-center justify-center"
                     >
-                      <span className="text-[#0A1110] text-xs">✓</span>
+                      <span className="text-bg-deep text-xs">✓</span>
                     </motion.div>
                   </motion.div>
                 ) : (
-                  <div className="w-20 h-20 flex items-center justify-center border-2 border-dashed border-[#D4AF37]/20 rounded">
-                    <span className="text-[#D4AF37]/30 text-3xl">?</span>
+                  <div className="w-20 h-20 flex items-center justify-center border-2 border-dashed border-gold-500/20 rounded">
+                    <span className="text-gold-500/30 text-3xl">?</span>
                   </div>
                 )}
               </div>
@@ -226,7 +228,7 @@ export default function FinalePage() {
                 className="mt-3 text-center"
               >
                 <h3 className={`text-sm tracking-[0.2em] ${
-                  seal.earned ? 'text-[#D4AF37]' : 'text-[#F5F5DC]/30'
+                  seal.earned ? 'text-gold-500' : 'text-ink-contrast/30'
                 }`}>
                   {seal.name}
                 </h3>
@@ -241,20 +243,20 @@ export default function FinalePage() {
           transition={{ delay: 1.5 }}
           className="text-center mb-12"
         >
-          <div className="inline-block p-8 bg-gradient-to-br from-[#D4AF37]/10 to-transparent border border-[#D4AF37]/20 rounded-lg">
-            <h3 className="text-xl text-[#D4AF37] tracking-[0.4em] mb-4">探索统计</h3>
+          <div className="inline-block p-8 bg-gradient-to-br from-[#D4AF37]/10 to-transparent border border-gold-500/20 rounded-lg">
+            <h3 className="text-xl text-gold-500 tracking-[0.4em] mb-4">探索统计</h3>
             <div className="grid grid-cols-3 gap-8">
               <div>
-                <div className="text-3xl text-[#D4AF37] font-serif mb-1">{visitedBuildings.length}</div>
-                <div className="text-sm text-[#F5F5DC]/50 tracking-[0.2em]">已访建筑</div>
+                <div className="text-3xl text-gold-500 font-serif mb-1">{visitedBuildings.length}</div>
+                <div className="text-sm text-ink-contrast/50 tracking-[0.2em]">已访建筑</div>
               </div>
               <div>
-                <div className="text-3xl text-[#D4AF37] font-serif mb-1">{earnedCount}</div>
-                <div className="text-sm text-[#F5F5DC]/50 tracking-[0.2em]">获得印记</div>
+                <div className="text-3xl text-gold-500 font-serif mb-1">{earnedCount}</div>
+                <div className="text-sm text-ink-contrast/50 tracking-[0.2em]">获得印记</div>
               </div>
               <div>
-                <div className="text-3xl text-[#D4AF37] font-serif mb-1">{Math.round(progress)}%</div>
-                <div className="text-sm text-[#F5F5DC]/50 tracking-[0.2em]">完成度</div>
+                <div className="text-3xl text-gold-500 font-serif mb-1">{Math.round(progressPct)}%</div>
+                <div className="text-sm text-ink-contrast/50 tracking-[0.2em]">完成度</div>
               </div>
             </div>
           </div>
@@ -268,14 +270,14 @@ export default function FinalePage() {
         >
           <Link
             to="/"
-            className="flex items-center gap-2 px-6 py-3 bg-[#D4AF37]/10 border border-[#D4AF37]/30 text-[#D4AF37] hover:bg-[#D4AF37]/20 transition-all tracking-[0.2em] rounded"
+            className="flex items-center gap-2 px-6 py-3 bg-gold-500/10 border border-gold-500/30 text-gold-500 hover:bg-gold-500/20 transition-all tracking-[0.2em] rounded"
           >
             <Home size={18} />
             返回首页
           </Link>
           <button
-            onClick={() => window.location.reload()}
-            className="flex items-center gap-2 px-6 py-3 bg-transparent border border-[#D4AF37]/30 text-[#D4AF37]/70 hover:text-[#D4AF37] hover:border-[#D4AF37]/50 transition-all tracking-[0.2em] rounded"
+            onClick={resetProgress}
+            className="flex items-center gap-2 px-6 py-3 bg-transparent border border-gold-500/30 text-gold-500/70 hover:text-gold-500 hover:border-gold-500/50 transition-all tracking-[0.2em] rounded"
           >
             <RotateCcw size={18} />
             重置进度
@@ -289,7 +291,7 @@ export default function FinalePage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-[#0A1110]/95 flex items-center justify-center z-50"
+            className="fixed inset-0 bg-bg-deep/95 flex items-center justify-center z-50"
           >
             <motion.div
               initial={{ scale: 0, rotate: -180 }}
@@ -307,19 +309,19 @@ export default function FinalePage() {
                   ]
                 }}
                 transition={{ duration: 2, repeat: Infinity }}
-                className="w-32 h-32 border-4 border-[#D4AF37] rounded-full flex items-center justify-center mx-auto mb-8"
+                className="w-32 h-32 border-4 border-gold-500 rounded-full flex items-center justify-center mx-auto mb-8"
               >
-                <span className="text-[#D4AF37] text-5xl font-serif">全</span>
+                <span className="text-gold-500 text-5xl font-serif">全</span>
               </motion.div>
-              <h2 className="text-4xl text-[#D4AF37] tracking-[0.5em] mb-4 font-serif">
+              <h2 className="text-4xl text-gold-500 tracking-[0.5em] mb-4 font-serif">
                 功德圆满
               </h2>
-              <p className="text-[#F5F5DC]/60 tracking-[0.3em] mb-8">
+              <p className="text-ink-contrast/60 tracking-[0.3em] mb-8">
                 您已完成所有建筑探索，获得营造印卷
               </p>
               <button
                 onClick={() => setShowCompletion(false)}
-                className="px-8 py-3 bg-[#D4AF37] text-[#0A1110] tracking-[0.3em] hover:bg-[#D4AF37]/90 transition-all rounded"
+                className="px-8 py-3 bg-gold-500 text-bg-deep tracking-[0.3em] hover:bg-gold-500/90 transition-all rounded"
               >
                 查看印卷
               </button>
@@ -334,7 +336,7 @@ export default function FinalePage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-[#0A1110]/90 flex items-center justify-center z-50"
+            className="fixed inset-0 bg-bg-deep/90 flex items-center justify-center z-50"
             onClick={() => setSelectedSeal(null)}
           >
             <motion.div
@@ -342,7 +344,7 @@ export default function FinalePage() {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.5, opacity: 0 }}
               onClick={e => e.stopPropagation()}
-              className="bg-[#1A1A1A] border border-[#D4AF37]/30 rounded-lg p-8 max-w-md text-center"
+              className="bg-bg-muted border border-gold-500/30 rounded-lg p-8 max-w-md text-center"
             >
               <svg viewBox="0 0 100 100" className="w-24 h-24 mx-auto mb-6">
                 <rect x="10" y="10" width="80" height="80" fill="#C23531" rx="4"/>
@@ -351,7 +353,7 @@ export default function FinalePage() {
                   x="50"
                   y="60"
                   textAnchor="middle"
-                  fill="#D4AF37"
+                  fill="var(--gold-500)"
                   fontSize="32"
                   fontFamily="'Noto Serif SC', serif"
                   fontWeight="bold"
@@ -359,11 +361,11 @@ export default function FinalePage() {
                   {selectedSeal.character}
                 </text>
               </svg>
-              <h3 className="text-2xl text-[#D4AF37] tracking-[0.4em] mb-4">{selectedSeal.name}</h3>
-              <p className="text-[#F5F5DC]/70 tracking-[0.15em] leading-relaxed">{selectedSeal.description}</p>
+              <h3 className="text-2xl text-gold-500 tracking-[0.4em] mb-4">{selectedSeal.name}</h3>
+              <p className="text-ink-contrast/70 tracking-[0.15em] leading-relaxed">{selectedSeal.description}</p>
               <button
                 onClick={() => setSelectedSeal(null)}
-                className="mt-6 px-6 py-2 border border-[#D4AF37]/30 text-[#D4AF37]/70 hover:text-[#D4AF37] hover:border-[#D4AF37]/50 transition-all tracking-[0.2em] rounded"
+                className="mt-6 px-6 py-2 border border-gold-500/30 text-gold-500/70 hover:text-gold-500 hover:border-gold-500/50 transition-all tracking-[0.2em] rounded"
               >
                 关闭
               </button>

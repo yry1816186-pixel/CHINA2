@@ -283,7 +283,109 @@ export const createSequence = (
 };
 
 // ============================================
-// 11. 响应式动画配置
+// 11. CGTN级电影效果预设
+// ============================================
+
+// 呼吸发光 - 让静态元素感觉"活"着
+export const breathGlow = (color: string = '#D4AF37', intensity: number = 1) => ({
+  boxShadow: [
+    `0 0 ${8 * intensity}px ${color}20`,
+    `0 0 ${25 * intensity}px ${color}50`,
+    `0 0 ${8 * intensity}px ${color}20`,
+  ],
+  transition: {
+    duration: 3,
+    repeat: Infinity,
+    ease: 'easeInOut' as const,
+  },
+});
+
+// 投影脉冲 - CGTN使用的金色投影动画
+export const dropShadowPulse = (color: string = '#D4AF37') => ({
+  filter: [
+    `drop-shadow(0 0 4px ${color}40)`,
+    `drop-shadow(0 0 12px ${color}80)`,
+    `drop-shadow(0 0 4px ${color}40)`,
+  ],
+  transition: {
+    duration: 2.5,
+    repeat: Infinity,
+    ease: 'easeInOut' as const,
+  },
+});
+
+// 边框发光脉冲 - 用于交互点和信息圆圈
+export const borderGlowPulse = (color: string = '#D4AF37') => ({
+  borderColor: [`${color}40`, color, `${color}40`],
+  boxShadow: [
+    `0 0 4px ${color}20`,
+    `0 0 12px ${color}50`,
+    `0 0 4px ${color}20`,
+  ],
+  transition: {
+    duration: 2,
+    repeat: Infinity,
+    ease: 'easeInOut' as const,
+  },
+});
+
+// 缩放揭示 - CGTN标志性从远处拉近效果
+export const zoomReveal = (startScale: number = 2.5) => ({
+  initial: { scale: startScale, opacity: 0 },
+  animate: { scale: 1, opacity: 1 },
+  exit: { scale: 0.8, opacity: 0 },
+  transition: { duration: 1.2, ease: [0.76, 0, 0.24, 1] as [number, number, number, number] },
+});
+
+// 分屏揭示 - CGTN屋顶部分的上下分开效果
+export const splitReveal = () => ({
+  top: {
+    initial: { y: '-100%' },
+    animate: { y: 0 },
+    exit: { y: '-100%' },
+  },
+  bottom: {
+    initial: { y: '100%' },
+    animate: { y: 0 },
+    exit: { y: '100%' },
+  },
+  transition: { duration: 1, ease: [0.76, 0, 0.24, 1] as [number, number, number, number] },
+});
+
+// 逐字淡入 - 模拟CGTN的逐词揭示
+export const staggerReveal = (index: number, total: number) => ({
+  initial: { opacity: 0, y: 10 },
+  animate: { opacity: 1, y: 0 },
+  transition: {
+    delay: index * 0.08,
+    duration: 0.4,
+    ease: 'easeOut' as const,
+  },
+});
+
+// 3D翻转进入 - CGTN文本图像的rotateX动画
+export const flip3DEnter = () => ({
+  initial: { rotateX: 15, opacity: 0, y: 30 },
+  animate: { rotateX: 0, opacity: 1, y: 0 },
+  exit: { rotateX: -15, opacity: 0, y: -30 },
+  transition: { duration: 0.8, ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number] },
+});
+
+// 径向脉冲 - CGTN探索按钮的雷达式脉冲
+export const radialPulse = () => ({
+  animate: {
+    scale: [1, 2.5],
+    opacity: [0.6, 0],
+  },
+  transition: {
+    duration: 2,
+    repeat: Infinity,
+    ease: 'easeOut' as const,
+  },
+});
+
+// ============================================
+// 12. 响应式动画配置
 // ============================================
 
 export const getResponsiveConfig = (width: number) => {

@@ -387,7 +387,7 @@ export const ParticleBurst: React.FC<{
 };
 
 // ============================================
-// 7. 光晕脉冲效果
+// 7. 光晕脉冲效果 - CGTN级呼吸发光
 // ============================================
 
 export const GlowPulse: React.FC<{
@@ -406,13 +406,138 @@ export const GlowPulse: React.FC<{
         ],
       }}
       transition={{
-        duration: 2,
+        duration: 3,
         repeat: Infinity,
         ease: 'easeInOut',
       }}
     >
       {children}
     </motion.div>
+  );
+};
+
+// ============================================
+// 7b. 径向脉冲 - CGTN探索按钮雷达效果
+// ============================================
+
+export const RadialPulse: React.FC<{
+  color?: string;
+  size?: number;
+  speed?: number;
+}> = ({ color = '#D4AF37', size = 60, speed = 2 }) => {
+  return (
+    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+      <motion.div
+        className="absolute rounded-full border"
+        style={{ width: size, height: size, borderColor: color }}
+        animate={{
+          scale: [1, 2.5],
+          opacity: [0.6, 0],
+        }}
+        transition={{
+          duration: speed,
+          repeat: Infinity,
+          ease: 'easeOut',
+        }}
+      />
+      <motion.div
+        className="absolute rounded-full border"
+        style={{ width: size, height: size, borderColor: color }}
+        animate={{
+          scale: [1, 2.5],
+          opacity: [0.6, 0],
+        }}
+        transition={{
+          duration: speed,
+          repeat: Infinity,
+          delay: speed / 2,
+          ease: 'easeOut',
+        }}
+      />
+    </div>
+  );
+};
+
+// ============================================
+// 7c. 逐字淡入组件 - CGTN级文本揭示
+// ============================================
+
+export const StaggerText: React.FC<{
+  text: string;
+  className?: string;
+  delay?: number;
+  staggerDuration?: number;
+}> = ({ text, className = '', delay = 0, staggerDuration = 0.06 }) => {
+  const chars = text.split('');
+  return (
+    <span className={className}>
+      {chars.map((char, i) => (
+        <motion.span
+          key={i}
+          className="inline-block"
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            delay: delay + i * staggerDuration,
+            duration: 0.3,
+            ease: 'easeOut',
+          }}
+        >
+          {char === ' ' ? '\u00A0' : char}
+        </motion.span>
+      ))}
+    </span>
+  );
+};
+
+// ============================================
+// 7d. 缩放揭示容器 - CGTN标志性拉近视效
+// ============================================
+
+export const ZoomReveal: React.FC<{
+  children: React.ReactNode;
+  className?: string;
+  startScale?: number;
+  duration?: number;
+}> = ({ children, className = '', startScale = 2.5, duration = 1.2 }) => {
+  return (
+    <motion.div
+      className={className}
+      initial={{ scale: startScale, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
+      exit={{ scale: 0.8, opacity: 0 }}
+      transition={{ duration, ease: [0.76, 0, 0.24, 1] }}
+    >
+      {children}
+    </motion.div>
+  );
+};
+
+// ============================================
+// 7e. 分屏揭示 - CGTN屋顶分开效果
+// ============================================
+
+export const SplitReveal: React.FC<{
+  children: React.ReactNode;
+  className?: string;
+  duration?: number;
+}> = ({ children, className = '', duration = 1 }) => {
+  return (
+    <div className={`relative overflow-hidden ${className}`}>
+      <motion.div
+        className="absolute inset-0 bg-[#0A1110] z-10"
+        initial={{ y: 0 }}
+        animate={{ y: '-100%' }}
+        transition={{ duration, ease: [0.76, 0, 0.24, 1] }}
+      />
+      <motion.div
+        className="absolute inset-0 bg-[#0A1110] z-10"
+        initial={{ y: 0 }}
+        animate={{ y: '100%' }}
+        transition={{ duration, ease: [0.76, 0, 0.24, 1] }}
+      />
+      {children}
+    </div>
   );
 };
 

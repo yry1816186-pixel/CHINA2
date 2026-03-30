@@ -3,12 +3,15 @@ import { ChapterSeal, UserProgress } from '../types';
 
 interface ProgressContextType {
   progress: UserProgress;
+  visitedBuildings: string[];
+  completedModules: string[];
   visitBuilding: (buildingId: string) => void;
   completeModule: (moduleId: string) => void;
   earnSeal: (seal: ChapterSeal) => void;
   hasVisited: (buildingId: string) => boolean;
   hasCompletedModule: (moduleId: string) => boolean;
   hasEarnedSeal: (sealType: ChapterSeal['type']) => boolean;
+  resetProgress: () => void;
 }
 
 const defaultProgress: UserProgress = {
@@ -73,17 +76,24 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
 
   const hasVisited = (buildingId: string) => progress.visitedBuildings.includes(buildingId);
   const hasCompletedModule = (moduleId: string) => progress.completedModules.includes(moduleId);
+  const resetProgress = () => {
+    setProgress(defaultProgress);
+    localStorage.removeItem(STORAGE_KEY);
+  };
   const hasEarnedSeal = (sealType: ChapterSeal['type']) => progress.earnedSeals.some(s => s.type === sealType);
 
   return (
     <ProgressContext.Provider value={{
       progress,
+      visitedBuildings: progress.visitedBuildings,
+      completedModules: progress.completedModules,
       visitBuilding,
       completeModule,
       earnSeal,
       hasVisited,
       hasCompletedModule,
-      hasEarnedSeal
+      hasEarnedSeal,
+      resetProgress
     }}>
       {children}
     </ProgressContext.Provider>

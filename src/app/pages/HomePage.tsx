@@ -5,139 +5,66 @@ import { X, ChevronLeft, ChevronRight, BookOpen } from 'lucide-react';
 import { buildingsData } from '../data/buildings';
 import { BuildingData } from '../types';
 import { useProgress, useNavigation } from '../context';
+import { CanvasParticles } from '../components/CanvasParticles';
 
 const BACKGROUND_URL = "https://images.unsplash.com/photo-1684871430852-3413cb17e040?auto=format&fit=crop&q=80&w=2000";
 
-const Particles = () => {
-  const [dimensions, setDimensions] = useState({ width: 1920, height: 1080 });
-  
-  useEffect(() => {
-    const updateDimensions = () => {
-      setDimensions({ width: window.innerWidth, height: window.innerHeight });
-    };
-    updateDimensions();
-    window.addEventListener('resize', updateDimensions);
-    return () => window.removeEventListener('resize', updateDimensions);
-  }, []);
-
-  const particles = useMemo(() => 
-    Array.from({ length: 80 }).map((_, i) => ({
-      id: i,
-      size: Math.random() * 3 + 1,
-      initialX: Math.random() * dimensions.width * 1.5,
-      initialY: dimensions.height + Math.random() * 200,
-      targetY: -100 - Math.random() * 200,
-      driftX: (Math.random() - 0.5) * 120,
-      duration: 4 + Math.random() * 6,
-      delay: Math.random() * 8,
-      opacity: Math.random() * 0.6 + 0.2,
-    }))
-  , [dimensions]);
-
-  return (
-    <div className="absolute inset-0 pointer-events-none z-30 overflow-hidden">
-      {particles.map((p) => (
-        <motion.div
-          key={p.id}
-          className="absolute rounded-full"
-          style={{ 
-            width: p.size, 
-            height: p.size,
-            background: `radial-gradient(circle, rgba(212,175,55,${p.opacity}) 0%, rgba(212,175,55,0) 70%)`,
-          }}
-          initial={{
-            x: p.initialX,
-            y: p.initialY,
-            scale: 0,
-          }}
-          animate={{
-            y: [p.initialY, p.initialY * 0.3, p.targetY],
-            x: [p.initialX, p.initialX + p.driftX * 0.5, p.initialX + p.driftX],
-            scale: [0, 1, 0.5],
-            opacity: [0, p.opacity, 0],
-          }}
-          transition={{
-            duration: p.duration,
-            repeat: Infinity,
-            ease: [0.25, 0.1, 0.25, 1],
-            delay: p.delay,
-          }}
-        />
-      ))}
-      {Array.from({ length: 15 }).map((_, i) => (
-        <motion.div
-          key={`glow-${i}`}
-          className="absolute w-1 h-1 bg-[#D4AF37] rounded-full"
-          style={{
-            left: `${10 + Math.random() * 80}%`,
-            top: `${Math.random() * 100}%`,
-            boxShadow: `0 0 ${6 + Math.random() * 8}px rgba(212,175,55,0.6)`,
-          }}
-          animate={{
-            opacity: [0, 0.8, 0],
-            scale: [0.5, 1.2, 0.5],
-          }}
-          transition={{
-            duration: 2 + Math.random() * 3,
-            repeat: Infinity,
-            delay: Math.random() * 4,
-          }}
-        />
-      ))}
-    </div>
-  );
-};
-
 const CustomCursor = () => {
-  const [mousePos, setMousePos] = useState({ x: -100, y: -100 });
-  const [isHoveringClickable, setIsHoveringClickable] = useState(false);
+  const mouseX = useMotionValue(-100);
+  const mouseY = useMotionValue(-100);
+  const dotX = useMotionValue(-100);
+  const dotY = useMotionValue(-100);
+  const isHovering = useMotionValue(0);
+  const cursorRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     const updateMouse = (e: MouseEvent) => {
-      setMousePos({ x: e.clientX, y: e.clientY });
-      
+      mouseX.set(e.clientX);
+      mouseY.set(e.clientY);
+
       const target = e.target as HTMLElement;
-      setIsHoveringClickable(
-        window.getComputedStyle(target).cursor === 'pointer' || 
+      const clickable =
+        window.getComputedStyle(target).cursor === 'pointer' ||
         target.closest('button') !== null ||
-        target.closest('.building-interactive') !== null
-      );
+        target.closest('.building-interactive') !== null;
+      isHovering.set(clickable ? 1 : 0);
     };
     window.addEventListener('mousemove', updateMouse);
     return () => window.removeEventListener('mousemove', updateMouse);
-  }, []);
+  }, [mouseX, mouseY, isHovering]);
+
+  const dotSpringX = useSpring(dotX, { stiffness: 1200, damping: 50, mass: 0.5 });
+  const dotSpringY = useSpring(dotY, { stiffness: 1200, damping: 50, mass: 0.5 });
+  const ringSpringX = useSpring(mouseX, { stiffness: 300, damping: 30, mass: 0.8 });
+  const ringSpringY = useSpring(mouseY, { stiffness: 300, damping: 30, mass: 0.8 });
+
+  useEffect(() => {
+    const unsub = mouseX.on('change', (x) => dotX.set(x - 6));
+    const unsub2 = mouseY.on('change', (y) => dotY.set(y - 6));
+    return () => { unsub(); unsub2(); };
+  }, [mouseX, mouseY, dotX, dotY]);
+
+  const ringScale = useTransform(isHovering, [0, 1], [1, 1.5]);
+  const ringRotate = useTransform(isHovering, [0, 1], [0, 45]);
+  const dotScale = useTransform(isHovering, [0, 1], [1, 0.5]);
 
   return (
     <>
-      <motion.div 
-        className="fixed top-0 left-0 w-3 h-3 bg-[#D4AF37] rounded-full pointer-events-none z-[100] mix-blend-screen"
-        animate={{ 
-          x: mousePos.x - 6, 
-          y: mousePos.y - 6,
-          scale: isHoveringClickable ? 0.5 : 1
-        }}
-        transition={{ type: "spring", stiffness: 1000, damping: 50, mass: 1 }}
+      <motion.div
+        className="fixed top-0 left-0 w-3 h-3 bg-gold-500 rounded-full pointer-events-none z-[100] mix-blend-screen"
+        style={{ x: dotSpringX, y: dotSpringY, scale: dotScale }}
       />
-      <motion.div 
-        className="fixed top-0 left-0 w-8 h-8 border border-[#D4AF37]/60 rounded-full pointer-events-none z-[100]"
-        animate={{ 
-          x: mousePos.x - 16, 
-          y: mousePos.y - 16,
-          scale: isHoveringClickable ? 1.5 : 1,
-          borderColor: isHoveringClickable ? 'rgba(194,53,49,0.8)' : 'rgba(212,175,55,0.6)',
-          rotate: isHoveringClickable ? 45 : 0
+      <motion.div
+        ref={cursorRef as React.RefObject<HTMLDivElement>}
+        className="fixed top-0 left-0 w-8 h-8 border border-gold-500/60 rounded-full pointer-events-none z-[100]"
+        style={{
+          x: useTransform(ringSpringX, v => v - 16),
+          y: useTransform(ringSpringY, v => v - 16),
+          scale: ringScale,
+          rotate: ringRotate,
+          borderColor: useTransform(isHovering, [0, 1], ['rgba(212,175,55,0.6)', 'rgba(194,53,49,0.8)']),
         }}
-        transition={{ type: "spring", stiffness: 300, damping: 30, mass: 1 }}
-      >
-        {isHoveringClickable && (
-          <>
-             <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1 h-1 bg-[#C23531] rounded-full" />
-             <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-1 h-1 bg-[#C23531] rounded-full" />
-             <div className="absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-1 h-1 bg-[#C23531] rounded-full" />
-             <div className="absolute right-0 top-1/2 translate-x-1/2 -translate-y-1/2 w-1 h-1 bg-[#C23531] rounded-full" />
-          </>
-        )}
-      </motion.div>
+      />
     </>
   );
 };
@@ -227,16 +154,16 @@ export default function HomePage() {
       animate={{ opacity: 1, clipPath: 'inset(0 0% 0 0%)' }}
       exit={{ opacity: 0, clipPath: 'inset(0 50% 0 50%)' }}
       transition={{ duration: 1.5, ease: [0.76, 0, 0.24, 1] }} 
-      className="w-screen h-screen overflow-hidden bg-[#0A1110] text-[#F5F5DC] font-serif relative selection:bg-[#D4AF37]/30 cursor-none"
+      className="w-screen h-screen overflow-hidden bg-bg-deep text-ink-contrast font-serif relative selection:bg-gold-500/30 cursor-none"
       onWheel={handleWheel}
       style={{ fontFamily: "'Noto Serif SC', serif" }}
     >
       <CustomCursor />
-      <Particles />
+      <CanvasParticles count={80} glowCount={15} />
 
       <Link
         to="/finale"
-        className="fixed top-6 right-6 z-50 flex items-center gap-2 px-4 py-2 bg-[#D4AF37]/10 border border-[#D4AF37]/30 text-[#D4AF37] hover:bg-[#D4AF37]/20 transition-all tracking-[0.2em] text-sm rounded"
+        className="fixed top-6 right-6 z-50 flex items-center gap-2 px-4 py-2 bg-gold-500/10 border border-gold-500/30 text-gold-500 hover:bg-gold-500/20 transition-all tracking-[0.2em] text-sm rounded"
       >
         <BookOpen size={16} />
         印卷
@@ -274,12 +201,12 @@ export default function HomePage() {
         ))}
       </motion.div>
 
-      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 w-1/3 h-[3px] bg-[#D4AF37]/10 z-40 rounded-full overflow-hidden flex items-center pointer-events-none">
+      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 w-1/3 h-[3px] bg-gold-500/10 z-40 rounded-full overflow-hidden flex items-center pointer-events-none">
          <motion.div
            className="h-full bg-gradient-to-r from-[#D4AF37]/50 via-[#D4AF37] to-[#D4AF37]/50 relative shadow-[0_0_15px_rgba(212,175,55,0.6)]"
            style={{ width: `${Math.max(1, scrollProgress * 100)}%` }}
          >
-           <div className="absolute right-0 top-1/2 -translate-y-1/2 w-2 h-5 bg-[#C23531] rounded-sm shadow-md" />
+           <div className="absolute right-0 top-1/2 -translate-y-1/2 w-2 h-5 bg-vermilion-500 rounded-sm shadow-md" />
          </motion.div>
       </div>
       
@@ -287,7 +214,7 @@ export default function HomePage() {
         initial={{ opacity: 0 }}
         animate={{ opacity: rawScrollX.get() < 100 ? 0.7 : 0 }}
         transition={{ delay: 2, duration: 1 }}
-        className="absolute bottom-20 left-1/2 -translate-x-1/2 z-40 text-[#D4AF37] tracking-[0.5em] text-sm flex items-center gap-4 pointer-events-none"
+        className="absolute bottom-20 left-1/2 -translate-x-1/2 z-40 text-gold-500 tracking-[0.5em] text-sm flex items-center gap-4 pointer-events-none"
       >
         <ChevronLeft size={16} className="opacity-50" />
         <span>拨动滚轮以游历华夏</span>
@@ -331,21 +258,21 @@ export default function HomePage() {
               initial={{ x: "100%", opacity: 0.8 }}
               animate={{ x: 0, opacity: 1, transition: { type: "spring", damping: 30, stiffness: 200, mass: 0.8 } }}
               exit={{ x: "100%", opacity: 0, transition: { ease: "easeIn", duration: 0.3 } }}
-              className="absolute top-0 right-0 h-full w-[45vw] min-w-[550px] max-w-2xl bg-[#0B120F]/95 border-l-[4px] border-[#D4AF37]/60 shadow-[-40px_0_80px_rgba(0,0,0,0.9)] z-50 flex flex-col backdrop-blur-2xl overflow-hidden"
+              className="absolute top-0 right-0 h-full w-[45vw] min-w-[550px] max-w-2xl bg-bg-panel/95 border-l-[4px] border-gold-500/60 shadow-[-40px_0_80px_rgba(0,0,0,0.9)] z-50 flex flex-col backdrop-blur-2xl overflow-hidden"
               style={{
                 backgroundImage: 'radial-gradient(circle at center, rgba(212,175,55,0.04) 0%, transparent 80%)'
               }}
               onClick={(e) => e.stopPropagation()}
             >
               <div className="absolute -right-20 top-0 bottom-0 flex items-center overflow-hidden opacity-[0.03] pointer-events-none select-none">
-                <span className="text-[300px] font-black text-[#D4AF37] leading-none [writing-mode:vertical-rl] whitespace-nowrap tracking-tighter">
+                <span className="text-[300px] font-black text-gold-500 leading-none [writing-mode:vertical-rl] whitespace-nowrap tracking-tighter">
                   {activeBuilding.name}
                 </span>
               </div>
 
               <button 
                 onClick={closePopup}
-                className="absolute top-10 left-10 p-4 text-[#D4AF37] border border-[#D4AF37]/30 hover:bg-[#C23531] hover:text-[#F5F5DC] hover:border-[#C23531] transition-all duration-300 z-50 group cursor-pointer backdrop-blur-md rounded-sm"
+                className="absolute top-10 left-10 p-4 text-gold-500 border border-gold-500/30 hover:bg-vermilion-500 hover:text-ink-contrast hover:border-vermilion-500 transition-all duration-300 z-50 group cursor-pointer backdrop-blur-md rounded-sm"
                 aria-label="关闭卷轴"
               >
                 <X size={26} strokeWidth={1} className="group-hover:rotate-90 transition-transform duration-500" />
@@ -357,14 +284,14 @@ export default function HomePage() {
                   initial={{ opacity: 0, x: 30 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.3, duration: 0.6, ease: "easeOut" }}
-                  className="flex flex-col items-center h-full border-l border-[#D4AF37]/10 pl-8"
+                  className="flex flex-col items-center h-full border-l border-gold-500/10 pl-8"
                 >
-                  <div className="w-16 h-16 border-[2px] border-[#C23531] text-[#C23531] flex items-center justify-center mb-12 rounded-sm shadow-[0_0_20px_rgba(194,53,49,0.25)] bg-[#C23531]/5 relative before:absolute before:inset-[3px] before:border before:border-[#C23531]/40">
+                  <div className="w-16 h-16 border-[2px] border-vermilion-500 border-vermilion-500 flex items-center justify-center mb-12 rounded-sm shadow-[0_0_20px_rgba(194,53,49,0.25)] bg-vermilion-500/5 relative before:absolute before:inset-[3px] before:border before:border-vermilion-500/40">
                     <span className="text-lg font-bold [writing-mode:vertical-rl] tracking-widest leading-none" style={{ fontFamily: 'SimSun, serif' }}>
                       {activeBuilding.seal}
                     </span>
                   </div>
-                  <h2 className="text-7xl font-black text-[#D4AF37] [writing-mode:vertical-rl] tracking-[0.3em] drop-shadow-[0_4px_15px_rgba(0,0,0,0.9)]">
+                  <h2 className="text-7xl font-black text-gold-500 [writing-mode:vertical-rl] tracking-[0.3em] drop-shadow-[0_4px_15px_rgba(0,0,0,0.9)]">
                     {activeBuilding.name}
                   </h2>
                 </motion.div>
@@ -373,12 +300,12 @@ export default function HomePage() {
                   initial={{ opacity: 0, y: -30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.4, duration: 0.6, ease: "easeOut" }}
-                  className="h-full border-l border-[#D4AF37]/5 pl-8 flex items-start pt-8"
+                  className="h-full border-l border-gold-500/5 pl-8 flex items-start pt-8"
                 >
-                  <p className="text-4xl text-[#F5F5DC]/80 [writing-mode:vertical-rl] tracking-[0.6em] font-serif leading-loose relative">
-                    <span className="absolute -top-8 left-1/2 -translate-x-1/2 text-5xl text-[#C23531]/30">「</span>
+                  <p className="text-4xl text-ink-contrast/80 [writing-mode:vertical-rl] tracking-[0.6em] font-serif leading-loose relative">
+                    <span className="absolute -top-8 left-1/2 -translate-x-1/2 text-5xl border-vermilion-500/30">「</span>
                     {activeBuilding.poem}
-                    <span className="absolute -bottom-12 left-1/2 -translate-x-1/2 text-5xl text-[#C23531]/30">」</span>
+                    <span className="absolute -bottom-12 left-1/2 -translate-x-1/2 text-5xl border-vermilion-500/30">」</span>
                   </p>
                 </motion.div>
 
@@ -391,12 +318,12 @@ export default function HomePage() {
                     className="flex flex-col gap-3"
                   >
                     <div className="flex items-center gap-4 mb-2">
-                      <div className="w-3 h-3 rotate-45 bg-[#C23531] shadow-[0_0_10px_rgba(194,53,49,0.5)]" />
-                      <h3 className="text-base text-[#D4AF37] tracking-[0.4em] font-bold">朝代地纪</h3>
+                      <div className="w-3 h-3 rotate-45 bg-vermilion-500 shadow-[0_0_10px_rgba(194,53,49,0.5)]" />
+                      <h3 className="text-base text-gold-500 tracking-[0.4em] font-bold">朝代地纪</h3>
                     </div>
                     <div className="flex gap-6 items-end pl-7">
-                      <span className="text-3xl text-[#F5F5DC] tracking-widest">{activeBuilding.dynasty}</span>
-                      <span className="text-base text-[#F5F5DC]/60 tracking-widest pb-1 border-b border-[#F5F5DC]/20">{activeBuilding.location}</span>
+                      <span className="text-3xl text-ink-contrast tracking-widest">{activeBuilding.dynasty}</span>
+                      <span className="text-base text-ink-contrast/60 tracking-widest pb-1 border-b border-[#F5F5DC]/20">{activeBuilding.location}</span>
                     </div>
                   </motion.div>
 
@@ -407,11 +334,11 @@ export default function HomePage() {
                     className="flex flex-col gap-4 relative pl-7"
                   >
                     <div className="absolute left-1.5 top-2 w-[1px] h-[calc(100%-10px)] bg-gradient-to-b from-[#D4AF37]/60 to-transparent" />
-                    <h3 className="text-base text-[#D4AF37] tracking-[0.4em] mb-2 -ml-7 flex items-center gap-4 font-bold">
-                      <div className="w-3 h-3 rotate-45 bg-[#D4AF37] shadow-[0_0_10px_rgba(212,175,55,0.4)]" />
+                    <h3 className="text-base text-gold-500 tracking-[0.4em] mb-2 -ml-7 flex items-center gap-4 font-bold">
+                      <div className="w-3 h-3 rotate-45 bg-gold-500 shadow-[0_0_10px_rgba(212,175,55,0.4)]" />
                       历史溯源
                     </h3>
-                    <p className="text-lg text-[#F5F5DC]/85 leading-[2.2] tracking-widest text-justify">
+                    <p className="text-lg text-ink-contrast/85 leading-[2.2] tracking-widest text-justify">
                       {activeBuilding.history}
                     </p>
                   </motion.div>
@@ -423,11 +350,11 @@ export default function HomePage() {
                     className="flex flex-col gap-4 relative pl-7"
                   >
                     <div className="absolute left-1.5 top-2 w-[1px] h-[calc(100%-10px)] bg-gradient-to-b from-[#D4AF37]/60 to-transparent" />
-                    <h3 className="text-base text-[#D4AF37] tracking-[0.4em] mb-2 -ml-7 flex items-center gap-4 font-bold">
-                      <div className="w-3 h-3 rotate-45 bg-[#D4AF37] shadow-[0_0_10px_rgba(212,175,55,0.4)]" />
+                    <h3 className="text-base text-gold-500 tracking-[0.4em] mb-2 -ml-7 flex items-center gap-4 font-bold">
+                      <div className="w-3 h-3 rotate-45 bg-gold-500 shadow-[0_0_10px_rgba(212,175,55,0.4)]" />
                       建筑规制
                     </h3>
-                    <p className="text-lg text-[#F5F5DC]/85 leading-[2.2] tracking-widest text-justify">
+                    <p className="text-lg text-ink-contrast/85 leading-[2.2] tracking-widest text-justify">
                       {activeBuilding.features}
                     </p>
                   </motion.div>
@@ -437,11 +364,11 @@ export default function HomePage() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.9, duration: 0.5 }}
                     onClick={() => handleEnterBuilding(activeBuilding)}
-                    className="mt-8 px-8 py-4 bg-[#D4AF37]/10 border-2 border-[#D4AF37] text-[#D4AF37] tracking-[0.3em] text-lg hover:bg-[#D4AF37] hover:text-[#0A1110] transition-all duration-300 cursor-pointer relative overflow-hidden group"
+                    className="mt-8 px-8 py-4 bg-gold-500/10 border-2 border-gold-500 text-gold-500 tracking-[0.3em] text-lg hover:bg-gold-500 hover:text-bg-deep transition-all duration-300 cursor-pointer relative overflow-hidden group"
                   >
                     <span className="relative z-10">入印探索</span>
                     <motion.div
-                      className="absolute inset-0 bg-[#D4AF37]"
+                      className="absolute inset-0 bg-gold-500"
                       initial={{ x: '-100%' }}
                       whileHover={{ x: 0 }}
                       transition={{ duration: 0.3 }}
@@ -463,7 +390,7 @@ export default function HomePage() {
             className="fixed inset-0 z-[200] flex items-center justify-center overflow-hidden"
           >
             <motion.div
-              className="absolute inset-0 bg-[#0A1110]"
+              className="absolute inset-0 bg-bg-deep"
               initial={{ clipPath: 'inset(0 50% 0 50%)' }}
               animate={{ clipPath: 'inset(0 0% 0 0%)' }}
               exit={{ clipPath: 'inset(0 50% 0 50%)' }}
@@ -531,7 +458,7 @@ export default function HomePage() {
                 exit={{ opacity: 0 }}
                 transition={{ delay: 0.5, duration: 0.4 }}
               >
-                <span className="text-[#D4AF37] text-2xl tracking-[0.8em] font-serif">
+                <span className="text-gold-500 text-2xl tracking-[0.8em] font-serif">
                   {activeBuilding.name}
                 </span>
               </motion.div>
@@ -545,7 +472,7 @@ export default function HomePage() {
                 {Array.from({ length: 30 }).map((_, i) => (
                   <motion.div
                     key={i}
-                    className="absolute w-1 h-1 bg-[#D4AF37] rounded-full"
+                    className="absolute w-1 h-1 bg-gold-500 rounded-full"
                     style={{
                       left: `${Math.random() * 100}%`,
                       top: `${Math.random() * 100}%`,
@@ -647,7 +574,7 @@ function BuildingItem({
                 style={{ pathLength }} 
               />
             </svg>
-            <span className="absolute text-[#D4AF37] text-xs tracking-widest font-bold font-sans">
+            <span className="absolute text-gold-500 text-xs tracking-widest font-bold font-sans">
               入印
             </span>
           </motion.div>
@@ -663,10 +590,10 @@ function BuildingItem({
             transition={{ duration: 0.3 }}
             className="absolute inset-[-8%] pointer-events-none z-0"
           >
-            <div className="absolute top-0 left-0 w-10 h-10 border-t-[4px] border-l-[4px] border-[#D4AF37] opacity-90 shadow-[-5px_-5px_20px_rgba(212,175,55,0.5)]" />
-            <div className="absolute top-0 right-0 w-10 h-10 border-t-[4px] border-r-[4px] border-[#D4AF37] opacity-90 shadow-[5px_-5px_20px_rgba(212,175,55,0.5)]" />
-            <div className="absolute bottom-0 left-0 w-10 h-10 border-b-[4px] border-l-[4px] border-[#D4AF37] opacity-90 shadow-[-5px_5px_20px_rgba(212,175,55,0.5)]" />
-            <div className="absolute bottom-0 right-0 w-10 h-10 border-b-[4px] border-r-[4px] border-[#D4AF37] opacity-90 shadow-[5px_5px_20px_rgba(212,175,55,0.5)]" />
+            <div className="absolute top-0 left-0 w-10 h-10 border-t-[4px] border-l-[4px] border-gold-500 opacity-90 shadow-[-5px_-5px_20px_rgba(212,175,55,0.5)]" />
+            <div className="absolute top-0 right-0 w-10 h-10 border-t-[4px] border-r-[4px] border-gold-500 opacity-90 shadow-[5px_-5px_20px_rgba(212,175,55,0.5)]" />
+            <div className="absolute bottom-0 left-0 w-10 h-10 border-b-[4px] border-l-[4px] border-gold-500 opacity-90 shadow-[-5px_5px_20px_rgba(212,175,55,0.5)]" />
+            <div className="absolute bottom-0 right-0 w-10 h-10 border-b-[4px] border-r-[4px] border-gold-500 opacity-90 shadow-[5px_5px_20px_rgba(212,175,55,0.5)]" />
           </motion.div>
         )}
       </AnimatePresence>
@@ -675,9 +602,9 @@ function BuildingItem({
         <motion.div
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
-          className="absolute top-4 right-4 w-6 h-6 bg-[#C23531] rounded-full flex items-center justify-center z-20 shadow-[0_0_10px_rgba(194,53,49,0.5)]"
+          className="absolute top-4 right-4 w-6 h-6 bg-vermilion-500 rounded-full flex items-center justify-center z-20 shadow-[0_0_10px_rgba(194,53,49,0.5)]"
         >
-          <span className="text-[#F5F5DC] text-xs">✓</span>
+          <span className="text-ink-contrast text-xs">✓</span>
         </motion.div>
       )}
 
@@ -694,7 +621,7 @@ function BuildingItem({
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: -20, opacity: 0 }}
               transition={{ delay: 0.1 }}
-              className="px-3 py-1 bg-[#D4AF37]/20 backdrop-blur-sm border border-[#D4AF37]/40 rounded text-[#D4AF37] text-sm tracking-wider"
+              className="px-3 py-1 bg-gold-500/20 backdrop-blur-sm border border-gold-500/40 rounded text-gold-500 text-sm tracking-wider"
             >
               {building.dynasty}
             </motion.span>
@@ -743,7 +670,7 @@ function BuildingItem({
             }}
           />
           <motion.span 
-            className="text-3xl text-[#D4AF37] tracking-[0.5em] font-bold drop-shadow-[0_3px_6px_rgba(0,0,0,0.9)] ml-3"
+            className="text-3xl text-gold-500 tracking-[0.5em] font-bold drop-shadow-[0_3px_6px_rgba(0,0,0,0.9)] ml-3"
             animate={{
               textShadow: isHovering && !isActive 
                 ? '0 0 20px rgba(212,175,55,0.6), 0 3px 6px rgba(0,0,0,0.9)'
@@ -758,7 +685,7 @@ function BuildingItem({
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 10 }}
-                className="text-sm text-[#D4AF37]/70 tracking-widest mt-2"
+                className="text-sm text-gold-500/70 tracking-widest mt-2"
               >
                 {building.location}
               </motion.span>

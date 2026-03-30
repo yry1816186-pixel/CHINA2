@@ -47,7 +47,7 @@ export default function BuildingDetailPage() {
   };
 
   const handleModuleComplete = (moduleId: string) => {
-    completeModule(moduleId);
+    completeModule(`${id}-${moduleId}`);
     
     const sealMap: Record<string, { type: '形' | '构' | '匠' | '饰' | '时' | '礼' | '守' | '园' | '塔' | '桥' | '居'; name: string }> = {
       axis: { type: '礼', name: '中轴之礼' },
@@ -64,7 +64,7 @@ export default function BuildingDetailPage() {
     };
 
     const sealInfo = sealMap[moduleId];
-    if (sealInfo && !hasCompletedModule(moduleId)) {
+    if (sealInfo && !hasCompletedModule(`${id}-${moduleId}`)) {
       earnSeal({
         id: `${building?.id}-${moduleId}`,
         name: sealInfo.name,
@@ -82,7 +82,7 @@ export default function BuildingDetailPage() {
     const props = {
       building,
       onComplete: () => handleModuleComplete(activeModule.id),
-      isCompleted: hasCompletedModule(activeModule.id)
+      isCompleted: hasCompletedModule(`${id}-${activeModule.id}`)
     };
 
     switch (activeModule.id) {
@@ -115,11 +115,11 @@ export default function BuildingDetailPage() {
 
   if (!building) {
     return (
-      <div className="w-screen h-screen bg-[#0A1110] flex items-center justify-center">
+      <div className="w-screen h-screen bg-bg-deep flex items-center justify-center">
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-          className="w-12 h-12 border-2 border-[#D4AF37] border-t-transparent rounded-full"
+          className="w-12 h-12 border-2 border-gold-500 border-t-transparent rounded-full"
         />
       </div>
     );
@@ -130,7 +130,7 @@ export default function BuildingDetailPage() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="w-screen h-screen bg-[#0A1110] text-[#F5F5DC] font-serif overflow-hidden relative"
+      className="w-screen h-screen bg-bg-deep text-ink-contrast font-serif overflow-hidden relative"
       style={{ fontFamily: "'Noto Serif SC', serif" }}
     >
       <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/rice-paper.png')] opacity-[0.02] pointer-events-none" />
@@ -139,15 +139,15 @@ export default function BuildingDetailPage() {
         <motion.button
           whileHover={{ x: -5 }}
           onClick={handleBack}
-          className="flex items-center gap-3 text-[#D4AF37] hover:text-[#F5F5DC] transition-colors cursor-pointer group"
+          className="flex items-center gap-3 text-gold-500 hover:text-ink-contrast transition-colors cursor-pointer group"
         >
           <ArrowLeft size={24} className="group-hover:-translate-x-1 transition-transform" />
           <span className="tracking-[0.3em]">收卷</span>
         </motion.button>
 
         <div className="flex items-center gap-6">
-          <h1 className="text-2xl text-[#D4AF37] tracking-[0.5em]">{building.name}</h1>
-          <div className="w-12 h-12 border-[2px] border-[#C23531] text-[#C23531] flex items-center justify-center rounded-sm shadow-[0_0_20px_rgba(194,53,49,0.25)] bg-[#C23531]/5">
+          <h1 className="text-2xl text-gold-500 tracking-[0.5em]">{building.name}</h1>
+          <div className="w-12 h-12 border-[2px] border-vermilion-500 border-vermilion-500 flex items-center justify-center rounded-sm shadow-[0_0_20px_rgba(194,53,49,0.25)] bg-vermilion-500/5">
             <span className="text-sm font-bold [writing-mode:vertical-rl] tracking-widest leading-none" style={{ fontFamily: 'SimSun, serif' }}>
               {building.seal}
             </span>
@@ -156,7 +156,7 @@ export default function BuildingDetailPage() {
 
         <button
           onClick={() => setSoundEnabled(!soundEnabled)}
-          className="p-3 text-[#D4AF37] border border-[#D4AF37]/30 hover:bg-[#D4AF37]/10 transition-all rounded-sm cursor-pointer"
+          className="p-3 text-gold-500 border border-gold-500/30 hover:bg-gold-500/10 transition-all rounded-sm cursor-pointer"
         >
           {soundEnabled ? <Volume2 size={20} /> : <VolumeX size={20} />}
         </button>
@@ -165,25 +165,25 @@ export default function BuildingDetailPage() {
       {building.modules && building.modules.length > 0 && (
         <nav className="absolute top-24 left-1/2 -translate-x-1/2 z-40">
           <div className="flex flex-col items-center gap-2">
-            <div className="flex gap-2 p-2 bg-[#0B120F]/80 backdrop-blur-md border border-[#D4AF37]/20 rounded-sm">
+            <div className="flex gap-2 p-2 bg-bg-panel/80 backdrop-blur-md border border-gold-500/20 rounded-sm">
               {building.modules.map((module, index) => (
                 <motion.button
                   key={module.id}
                   onClick={() => setActiveModule(module)}
                   className={`px-6 py-3 text-sm tracking-[0.2em] transition-all relative cursor-pointer ${
                     activeModule?.id === module.id
-                      ? 'text-[#0A1110] bg-[#D4AF37]'
-                      : 'text-[#D4AF37] hover:bg-[#D4AF37]/10'
+                      ? 'text-bg-deep bg-gold-500'
+                      : 'text-gold-500 hover:bg-gold-500/10'
                   }`}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
                   <span className="relative z-10">{module.title}</span>
-                  {hasCompletedModule(module.id) && (
+                  {hasCompletedModule(`${id}-${module.id}`) && (
                     <motion.div
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
-                      className="absolute -top-1 -right-1 w-3 h-3 bg-[#C23531] rounded-full shadow-[0_0_8px_rgba(194,53,49,0.6)]"
+                      className="absolute -top-1 -right-1 w-3 h-3 bg-vermilion-500 rounded-full shadow-[0_0_8px_rgba(194,53,49,0.6)]"
                     />
                   )}
                 </motion.button>
@@ -195,9 +195,9 @@ export default function BuildingDetailPage() {
                   <motion.div
                     key={module.id}
                     className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                      hasCompletedModule(module.id) 
-                        ? 'bg-[#C23531] shadow-[0_0_6px_rgba(194,53,49,0.5)]' 
-                        : 'bg-[#D4AF37]/30'
+                      hasCompletedModule(`${id}-${module.id}`)
+                        ? 'bg-vermilion-500 shadow-[0_0_6px_rgba(194,53,49,0.5)]' 
+                        : 'bg-gold-500/30'
                     }`}
                     animate={{
                       scale: activeModule?.id === module.id ? 1.3 : 1,
@@ -205,8 +205,8 @@ export default function BuildingDetailPage() {
                   />
                 ))}
               </div>
-              <span className="text-xs text-[#D4AF37]/60 tracking-wider">
-                {building.modules.filter(m => hasCompletedModule(m.id)).length}/{building.modules.length}
+              <span className="text-xs text-gold-500/60 tracking-wider">
+                {building.modules.filter(m => hasCompletedModule(`${id}-${m.id}`)).length}/{building.modules.length}
               </span>
             </div>
           </div>
@@ -234,15 +234,15 @@ export default function BuildingDetailPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[200] bg-[#0A1110] flex items-center justify-center"
+            className="fixed inset-0 z-[200] bg-bg-deep flex items-center justify-center"
           >
             <motion.div
               initial={{ scale: 1, rotate: 0 }}
               animate={{ scale: 0, rotate: 180 }}
               transition={{ duration: 0.5 }}
-              className="w-24 h-24 border-4 border-[#D4AF37] rounded-full flex items-center justify-center"
+              className="w-24 h-24 border-4 border-gold-500 rounded-full flex items-center justify-center"
             >
-              <span className="text-[#D4AF37] text-2xl tracking-[0.5em]">收</span>
+              <span className="text-gold-500 text-2xl tracking-[0.5em]">收</span>
             </motion.div>
           </motion.div>
         )}
