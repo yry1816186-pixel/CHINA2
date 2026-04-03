@@ -1,0 +1,15 @@
+{
+  "id": "china2-first-wave-reference-shell-contract-index",
+  "status": "controlled_first_wave_not_final",
+  "source_of_truth": {
+    "human_readable_contract": "web/reference-shell/REVIEW_CONTRACT.md",
+    "intro_strategy": "web/INTRO_ENTRY_EXECUTION_STRATEGY.md",
+    "agent_boundary": "web/AGENT_IMPLEMENTATION_BOUNDARY.md",
+    "handoff_gate": "web/VIDEO_TO_WEB_HANDOFF_GATE.md"
+  },
+  "notes": [
+    "This file is an index for agent lookup, not a replacement for the human-readable contract.",
+    "Do not treat reviewed_candidate scenes as frozen fact-layer proof.",
+    "Do not treat scene_00_intro_entry as a frozen real-site entrance asset."
+  ]
+}
