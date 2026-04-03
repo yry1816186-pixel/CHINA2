@@ -1,0 +1,92 @@
+{
+  "project": {
+    "id": "china2-first-wave-reference-shell-contract-driven",
+    "status": "controlled_first_wave_not_final",
+    "hardBoundaries": [
+      "当前仓库不是最终成品站。",
+      "scene_00_intro_entry 仍未冻结，不得伪装成单一真实遗址入口。",
+      "reviewed_candidate 只能作为受控解释锚点，不等于最终事实层。",
+      "当前环境无法实际浏览外部参考站，因此本页不声称已完成参考级对照审查。"
+    ],
+    "metrics": [
+      ["当前工作面", "first-wave / 4 key scenes"],
+      ["目标页面", "contract-driven review shell"],
+      ["intro 状态", "unresolved disclosure-first"],
+      ["当前阶段", "not final / bounded candidate review"]
+    ]
+  },
+  "sceneContracts": {
+    "scene_00_intro_entry": {
+      "chapterLabel": "Chapter 00 · Intro",
+      "strategy": "composite-threshold-disclosure-first",
+      "readingTask": "建立观看关系、真实性边界与综合教学场景的进入方式，而不是直接抛出单一真实遗址。",
+      "lede": "入口不是高地标英雄镜头，而是对整站观看协议的声明：观众进入的是一个受控、克制、复合的教学场景。",
+      "boundaryText": "当前 anchor 仍为 TBD。允许 composite teaching scene，但必须持续披露它不是单一真实遗址的冻结入口。",
+      "discipline": "必须让 disclosure 强于 monumentality。观众第一眼读到的应该是“如何观看”，而不是“哪座名建筑”。",
+      "mustNotBecome": [
+        "单一真实遗址的 hero shot",
+        "旅游宣传片式地标开场",
+        "纪实重建式入口证明"
+      ],
+      "requiredDisclosures": [
+        "unresolved status 持续可见",
+        "composite teaching scene framing 持续可见",
+        "不得引入单一遗址身份宣告"
+      ]
+    },
+    "scene_01_orientation_order": {
+      "chapterLabel": "Chapter 01 · Orientation",
+      "strategy": "bounded-order-threshold-reading",
+      "readingTask": "让方向、阈限、压缩与释放、层级关系成为可读秩序，而不是礼仪路线或权力 spectacle。",
+      "lede": "秩序先通过空间关系被身体读到，再通过符号被理解。这个 scene 的任务，是把空间序列本身做成知识语言。",
+      "boundaryText": "当前 anchor 为受控候选，允许以 Beijing palace-complex candidate 作秩序解释锚点，但不得滑向中轴奇观、皇家奇观或 staged route。",
+      "discipline": "要把阈限、层级、方向做成 pause 后仍可理解的结构秩序，而不是靠大镜头压人。",
+      "mustNotBecome": [
+        "礼仪路线演示",
+        "中轴奇观展示",
+        "泛 majestic fly-through"
+      ],
+      "requiredDisclosures": [
+        "reviewed candidate status 可见",
+        "order / threshold framing 保持主位",
+        "不得引入 power-narrative wording"
+      ]
+    },
+    "scene_03_structure_primary": {
+      "chapterLabel": "Chapter 03 · Structure",
+      "strategy": "semi-abstract-structural-reading",
+      "readingTask": "把柱、梁、支撑层级与主结构秩序做成解释层，而不是技术炫耀或纪录式实景证明。",
+      "lede": "结构高潮的价值不在于“复杂”，而在于把建筑智慧压缩成一眼就能读到的支撑关系。",
+      "boundaryText": "当前 anchor 为 Foguang Temple East Hall reviewed candidate。可作为 bounded explanatory anchor，不可扩写成 blanket structural proof。",
+      "discipline": "必须保持半抽象、层级清晰、单主结构栈可读。暂停后应先读到 support order，而不是读到视觉刺激。",
+      "mustNotBecome": [
+        "技术奇观",
+        "纪录式遗址证明",
+        "装饰性机械表演"
+      ],
+      "requiredDisclosures": [
+        "reviewed candidate status 可见",
+        "abstract explanatory mode 可见",
+        "不得引入 totalizing structural proof"
+      ]
+    },
+    "scene_06_conservation_boundary": {
+      "chapterLabel": "Chapter 05 · Conservation",
+      "strategy": "care-boundary-judgement",
+      "readingTask": "把 historic layer 与 careful intervention layer 的边界做清楚，让保护看起来像克制判断，而不是焕新叙事。",
+      "lede": "保护不是胜利叙事，而是边界判断：什么应保留，什么应克制介入，什么必须让历史层继续可见。",
+      "boundaryText": "当前 anchor 为 Pingyao reviewed candidate。可作 conservation-boundary explanation，不可滑向旅游宣传或奇迹修复 narrative。",
+      "discipline": "画面必须稳定、中性、可注释。观众读到的应是 boundary judgement，而不是 triumphant transformation。",
+      "mustNotBecome": [
+        "修复奇迹片",
+        "更新焕新宣传片",
+        "以单镜头充当全部保护证明"
+      ],
+      "requiredDisclosures": [
+        "reviewed candidate status 可见",
+        "conservation-as-care framing 保持主位",
+        "不得引入 triumph 或 tourism wording"
+      ]
+    }
+  }
+}
