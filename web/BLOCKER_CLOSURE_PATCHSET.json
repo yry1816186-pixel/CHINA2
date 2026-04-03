@@ -1,0 +1,57 @@
+{
+  "id": "china2-web-blocker-closure-patchset",
+  "status": "ready_for_swap_execution_not_yet_applied",
+  "goal": "close the two highest-priority blockers by swapping current entry and canonical shell files to the prepared drafts",
+  "blockers": [
+    {
+      "id": "root-entry-not-canonicalized",
+      "status": "open",
+      "description": "The repository root default page still does not collapse into the canonical contract-driven entry."
+    },
+    {
+      "id": "dropzone-auto-resolution-not-applied",
+      "status": "open",
+      "description": "The canonical shell still does not default to the prepared dropzone-first asset resolution logic."
+    }
+  ],
+  "swapSequence": [
+    {
+      "step": 1,
+      "target": "web/index.html",
+      "replaceWith": "web/ROOT_ENTRY_CANONICAL_HANDOFF_DRAFT.html",
+      "reason": "Collapse the root default page into a canonical handoff to web/reference-shell/index.contract.html instead of leaving old and new entry surfaces in parallel."
+    },
+    {
+      "step": 2,
+      "target": "web/reference-shell/app.contract.js",
+      "replaceWith": "web/reference-shell/app.contract.dropzone-ready.js",
+      "reason": "Adopt canonical dropzone-first asset resolution in the contract-driven shell while preserving truth-boundary disclosure."
+    },
+    {
+      "step": 3,
+      "target": "web/reference-shell/index.contract.html",
+      "replaceWith": "web/reference-shell/index.contract.dropzone-ready.html",
+      "reason": "Make the canonical contract-driven shell actually point to the dropzone-ready implementation draft."
+    }
+  ],
+  "postSwapChecks": [
+    "Opening the web root no longer leaves the operator in the old execution shell as a parallel default entry.",
+    "The canonical shell continues to display scene status, evidence grade, anchor boundary, allowed mode and risk disclosures.",
+    "scene_03_structure_primary.mp4 resolves automatically from web/assets/first-wave/ when present.",
+    "scene_06_conservation_boundary.mp4 resolves automatically from web/assets/first-wave/ when present.",
+    "scene_01_orientation_order.mp4 resolves automatically from web/assets/first-wave/ when present.",
+    "Poster fallback works when video is absent.",
+    "scene_00_intro_entry remains exploratory/disclosure-first even if files exist.",
+    "Manifest remains a fact/supplement layer rather than the user's required wiring table."
+  ],
+  "sourceSpecs": [
+    "web/ROOT_ENTRY_CANONICALIZATION_SPEC.md",
+    "web/reference-shell/DROPZONE_AUTO_RESOLUTION_IMPLEMENTATION_SPEC.md",
+    "web/SWAP_IN_SEQUENCE_TO_CLOSE_BLOCKERS.md"
+  ],
+  "notes": [
+    "This patchset does not claim the swaps are already applied.",
+    "It exists to eliminate ambiguity about which files should now be replaced and in what order.",
+    "Until these swaps are actually applied to the current live files, the blockers remain open."
+  ]
+}
