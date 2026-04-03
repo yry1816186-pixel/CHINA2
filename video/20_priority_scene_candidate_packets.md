@@ -44,23 +44,23 @@
 - `scene_id`: `scene_00_intro_entry`
 - `chapter_id`: `chapter_00_intro`
 - `packet_status`: `candidate_not_execution_authorized`
-- `current_research_gate`: `requires_minimum_case_anchor_and_source_ref`
+- `current_research_gate`: `exploratory_candidate_review_exists_but_master_anchor_unresolved`
 - `goal`: 建立综合教学场景入口，不让观众误读为单一真实遗址
 - `allowed_mode`: `B_composite_teaching_scene`
 - `must_not_become`: heritage-site promo / one-site reconstruction / monumental hero shot
-- `minimal prompt direction`: calm threshold entry into a composite teaching scene of ancient Chinese architecture, one coherent inward relation, restrained atmosphere, layered threshold and courtyard depth, readable without motion tricks, no site-specific landmark identity, no tourism promo tone, no spectacle climax
-- `review focus`: anti-misreading strength / threshold clarity / controlled atmosphere
+- `minimal prompt direction`: calm threshold entry into a composite teaching scene of ancient Chinese architecture, one coherent inward relation, restrained atmosphere, layered threshold and courtyard depth, readable without motion tricks, preserve explicit composite-scene disclosure, no site-specific landmark identity, no tourism promo tone, no spectacle climax
+- `review focus`: anti-misreading strength / threshold clarity / controlled atmosphere / disclosure must remain stronger than monumentality
 
 ## Candidate Packet 04
 - `scene_id`: `scene_01_orientation_order`
 - `chapter_id`: `chapter_01_orientation`
-- `packet_status`: `candidate_not_execution_authorized`
-- `current_research_gate`: `requires_minimum_case_anchor_and_source_ref`
+- `packet_status`: `candidate_not_execution_authorized_but_reviewed_candidate_registered`
+- `current_research_gate`: `reviewed_candidate_registered_requires_claim_scope_lock`
 - `goal`: 建立定向、阈限、层级、秩序的最小视觉语法
 - `allowed_mode`: `B_composite_teaching_scene`
-- `must_not_become`: ceremonial route / symmetry spectacle / generic majestic fly-through
-- `minimal prompt direction`: controlled walking-height spatial order study in a composite teaching scene, threshold spacing, compression-release rhythm, layered hierarchy without pageantry, no iconic one-site duplication, no rotating showcase camera, no spectacle framing, readable as spatial order when paused
-- `review focus`: hierarchy clarity / threshold logic / non-ceremonial reading
+- `must_not_become`: staged route / symmetry spectacle / generic majestic fly-through
+- `minimal prompt direction`: controlled walking-height spatial order study in a composite teaching scene, bounded by the reviewed Beijing palace-complex candidate only as an order-and-threshold anchor, threshold spacing, compression-release rhythm, layered hierarchy without pageantry, no iconic one-site duplication, no rotating showcase camera, no staged-route framing, no spectacle framing, readable as spatial order when paused
+- `review focus`: hierarchy clarity / threshold logic / non-performative reading / no route-overread
 
 ## 进入下一轮的条件
 任一候选 packet 只有在以下条件满足后，才允许进入更高一层细化：
