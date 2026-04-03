@@ -1,17 +1,17 @@
 {
   "id": "china2-web-blocker-closure-patchset",
-  "status": "ready_for_swap_execution_not_yet_applied",
-  "goal": "close the two highest-priority blockers by swapping current entry and canonical shell files to the prepared drafts",
+  "status": "historical_record",
+  "goal": "record the swap set that was previously prepared to close the two highest-priority blockers, and clarify that the corresponding live-file swaps are now landed on main",
   "blockers": [
     {
       "id": "root-entry-not-canonicalized",
-      "status": "open",
-      "description": "The repository root default page still does not collapse into the canonical contract-driven entry."
+      "status": "closed_on_main",
+      "description": "The repository root default page now collapses into the canonical contract-driven entry."
     },
     {
       "id": "dropzone-auto-resolution-not-applied",
-      "status": "open",
-      "description": "The canonical shell still does not default to the prepared dropzone-first asset resolution logic."
+      "status": "closed_on_main",
+      "description": "The canonical shell now defaults to the prepared dropzone-first asset resolution logic."
     }
   ],
   "swapSequence": [
@@ -19,19 +19,22 @@
       "step": 1,
       "target": "web/index.html",
       "replaceWith": "web/ROOT_ENTRY_CANONICAL_HANDOFF_DRAFT.html",
-      "reason": "Collapse the root default page into a canonical handoff to web/reference-shell/index.contract.html instead of leaving old and new entry surfaces in parallel."
+      "reason": "Historical swap for collapsing the root default page into a canonical handoff to web/reference-shell/index.contract.html.",
+      "landed": true
     },
     {
       "step": 2,
       "target": "web/reference-shell/app.contract.js",
       "replaceWith": "web/reference-shell/app.contract.dropzone-ready.js",
-      "reason": "Adopt canonical dropzone-first asset resolution in the contract-driven shell while preserving truth-boundary disclosure."
+      "reason": "Historical swap for adopting canonical dropzone-first asset resolution in the contract-driven shell.",
+      "landed": true
     },
     {
       "step": 3,
       "target": "web/reference-shell/index.contract.html",
       "replaceWith": "web/reference-shell/index.contract.dropzone-ready.html",
-      "reason": "Make the canonical contract-driven shell actually point to the dropzone-ready implementation draft."
+      "reason": "Historical swap for pointing the canonical contract-driven shell to the dropzone-ready implementation draft.",
+      "landed": true
     }
   ],
   "postSwapChecks": [
@@ -41,8 +44,8 @@
     "scene_06_conservation_boundary.mp4 resolves automatically from web/assets/first-wave/ when present.",
     "scene_01_orientation_order.mp4 resolves automatically from web/assets/first-wave/ when present.",
     "Poster fallback works when video is absent.",
-    "scene_00_intro_entry remains exploratory/disclosure-first even if files exist.",
-    "Manifest remains a fact/supplement layer rather than the user's required wiring table."
+    "scene_00_intro_entry remains exploratory even if files exist.",
+    "Manifest remains a fact or supplement layer rather than the user's required wiring table."
   ],
   "sourceSpecs": [
     "web/ROOT_ENTRY_CANONICALIZATION_SPEC.md",
@@ -50,8 +53,8 @@
     "web/SWAP_IN_SEQUENCE_TO_CLOSE_BLOCKERS.md"
   ],
   "notes": [
-    "This patchset does not claim the swaps are already applied.",
-    "It exists to eliminate ambiguity about which files should now be replaced and in what order.",
-    "Until these swaps are actually applied to the current live files, the blockers remain open."
+    "This file is historical state, not an open execution instruction.",
+    "Do not treat it as evidence that the blockers are still open.",
+    "Live-state truth must be read from current main files and canonical entry behavior."
   ]
 }
