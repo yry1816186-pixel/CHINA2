@@ -1,0 +1,101 @@
+{
+  "id": "china2-first-wave-asset-dropzone-spec",
+  "version": "0.1.0",
+  "projectStatus": "controlled_first_wave_not_final",
+  "canonicalVideoPromptSource": "web/DIRECT_COPY_VIDEO_TEXTS.md",
+  "canonicalPageEntry": "web/reference-shell/index.contract.html",
+  "canonicalAgentStarterPack": "web/FIRST_WAVE_AGENT_STARTER_PACK.json",
+  "userOnlySteps": [
+    "copy prompts from web/DIRECT_COPY_VIDEO_TEXTS.md",
+    "generate videos",
+    "drop generated files into web/assets/first-wave/",
+    "hand project to agent"
+  ],
+  "dropzone": {
+    "root": "web/assets/first-wave/",
+    "namingPolicy": {
+      "baseNameMustEqualSceneId": true,
+      "forbiddenSuffixes": [
+        "_final",
+        "ultimate",
+        "masterpiece",
+        "frozen_truth"
+      ],
+      "notes": [
+        "Do not encode false finality into filenames.",
+        "Intro assets, if present, remain exploratory unless repository contracts are explicitly upgraded."
+      ]
+    },
+    "requiredVideos": [
+      {
+        "sceneId": "scene_03_structure_primary",
+        "file": "scene_03_structure_primary.mp4",
+        "required": true
+      },
+      {
+        "sceneId": "scene_06_conservation_boundary",
+        "file": "scene_06_conservation_boundary.mp4",
+        "required": true
+      },
+      {
+        "sceneId": "scene_01_orientation_order",
+        "file": "scene_01_orientation_order.mp4",
+        "required": true
+      }
+    ],
+    "optionalAssets": [
+      {
+        "sceneId": "scene_03_structure_primary",
+        "acceptedFiles": [
+          "scene_03_structure_primary.jpg",
+          "scene_03_structure_primary.png",
+          "scene_03_structure_primary.webp"
+        ]
+      },
+      {
+        "sceneId": "scene_06_conservation_boundary",
+        "acceptedFiles": [
+          "scene_06_conservation_boundary.jpg",
+          "scene_06_conservation_boundary.png",
+          "scene_06_conservation_boundary.webp"
+        ]
+      },
+      {
+        "sceneId": "scene_01_orientation_order",
+        "acceptedFiles": [
+          "scene_01_orientation_order.jpg",
+          "scene_01_orientation_order.png",
+          "scene_01_orientation_order.webp"
+        ]
+      },
+      {
+        "sceneId": "scene_00_intro_entry",
+        "acceptedFiles": [
+          "scene_00_intro_entry.mp4",
+          "scene_00_intro_entry.jpg",
+          "scene_00_intro_entry.png",
+          "scene_00_intro_entry.webp"
+        ],
+        "policy": "exploratory_only_not_strong_handoff"
+      }
+    ]
+  },
+  "agentMustNotPushBackToUser": [
+    "manual manifest editing",
+    "manual handoff package assembly",
+    "manual scene ordering decisions",
+    "manual page-entry selection",
+    "manual conflict reconciliation across docs"
+  ],
+  "agentStartingReads": [
+    "web/START_HERE.md",
+    "web/FIRST_WAVE_AGENT_STARTER_PACK.json",
+    "web/reference-shell/REVIEW_CONTRACT.md",
+    "web/reference-shell/index.contract.html"
+  ],
+  "knownCurrentLimitations": [
+    "The repository still contains older entry surfaces that can mislead implementers if they ignore the canonical path.",
+    "Automatic asset resolution from this dropzone is not yet guaranteed by every existing page entry.",
+    "Review, intake and handoff templates still require clearer role separation between user work and agent work."
+  ]
+}
