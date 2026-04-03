@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CHINA2 · First-Wave Execution Shell</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="shell">
+      <aside class="rail">
+        <div class="rail__inner">
+          <p class="eyebrow">CHINA2</p>
+          <h1>First-Wave Execution Shell</h1>
+          <p class="rail__intro">
+            这个页面不是最终成品，而是一个可接样片、可验证滚动逻辑、可校准视觉与文本关系的执行壳。
+          </p>
+          <div class="status-card">
+            <div><span>模式</span><strong>controlled-first-wave</strong></div>
+            <div><span>当前可接样片</span><strong>3 / 4</strong></div>
+            <div><span>未冻结入口</span><strong>scene_00_intro_entry</strong></div>
+          </div>
+          <nav id="scene-nav" class="scene-nav" aria-label="场景导航"></nav>
+        </div>
+      </aside>
+
+      <main class="main">
+        <section class="hero">
+          <div class="hero__copy">
+            <p class="eyebrow">执行入口</p>
+            <h2>先用 3 条样片验证作品气质，再决定整站。</h2>
+            <p>
+              当前壳体只服务 first-wave。请优先接入结构、保护、秩序三条样片；入口仍保持保守，不做高地标强锚定。
+            </p>
+          </div>
+        </section>
+
+        <div class="experience">
+          <section class="stage-wrap">
+            <div class="stage" id="stage">
+              <div class="stage__media" id="stage-media">
+                <div class="media-placeholder">等待样片接入</div>
+              </div>
+              <div class="stage__meta">
+                <p class="eyebrow" id="stage-chapter">Chapter</p>
+                <h3 id="stage-title">Scene</h3>
+                <p id="stage-summary"></p>
+                <dl class="meta-grid">
+                  <div><dt>Status</dt><dd id="stage-status"></dd></div>
+                  <div><dt>Anchor</dt><dd id="stage-anchor"></dd></div>
+                  <div><dt>Evidence</dt><dd id="stage-evidence"></dd></div>
+                  <div><dt>Mode</dt><dd id="stage-mode"></dd></div>
+                </dl>
+                <p class="stage__notes" id="stage-notes"></p>
+              </div>
+            </div>
+          </section>
+
+          <section class="story" id="story"></section>
+        </div>
+      </main>
+    </div>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
