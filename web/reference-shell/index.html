@@ -3,122 +3,78 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CHINA2 · Reference Shell</title>
-    <meta
-      name="description"
-      content="A stronger long-scroll reference shell for CHINA2 first-wave scene review, without pretending the project is already final."
-    />
-    <link rel="stylesheet" href="./styles.css" />
+    <title>CHINA2 · Legacy Reference Shell Redirect</title>
+    <meta http-equiv="refresh" content="0; url=./index.contract.html" />
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #0b0d11;
+        --panel: rgba(255,255,255,0.04);
+        --line: rgba(255,255,255,0.1);
+        --text: #f2efe8;
+        --muted: #b9b2a4;
+        --accent: #d2b07a;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        background: radial-gradient(circle at top, rgba(210,176,122,0.12), transparent 26%), linear-gradient(180deg, #0d1014, #090b0e);
+        color: var(--text);
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+      main {
+        width: min(720px, calc(100vw - 40px));
+        padding: 28px;
+        border: 1px solid var(--line);
+        border-radius: 24px;
+        background: var(--panel);
+        backdrop-filter: blur(14px);
+      }
+      p, h1 { margin: 0; }
+      .kicker {
+        font-size: 11px;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--accent);
+      }
+      h1 {
+        margin-top: 10px;
+        font-size: clamp(28px, 5vw, 48px);
+        line-height: 1.02;
+        letter-spacing: -0.03em;
+      }
+      .copy {
+        margin-top: 18px;
+        color: var(--muted);
+        line-height: 1.85;
+        font-size: 16px;
+      }
+      a {
+        display: inline-flex;
+        margin-top: 20px;
+        padding: 12px 14px;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        color: var(--text);
+        text-decoration: none;
+      }
+    </style>
   </head>
   <body>
-    <div class="page-shell">
-      <aside class="side-rail">
-        <div class="side-rail__inner">
-          <p class="kicker">CHINA2</p>
-          <h1>Reference Shell</h1>
-          <p class="side-rail__intro">
-            一个更接近作品级长滚动页面秩序的并行样机。它不宣称项目已经 final，只负责把 first-wave 的观看协议、证据边界与场景纪律放到页面首层。
-          </p>
-
-          <section class="rail-block rail-block--warning">
-            <p class="rail-block__label">当前硬边界</p>
-            <ul id="hard-boundaries" class="rail-list"></ul>
-          </section>
-
-          <section class="rail-block">
-            <p class="rail-block__label">项目现实</p>
-            <div class="metrics" id="metrics"></div>
-          </section>
-
-          <nav class="scene-index" aria-label="场景索引" id="scene-index"></nav>
-        </div>
-      </aside>
-
-      <main class="main-column">
-        <header class="hero">
-          <div class="hero__eyebrow-row">
-            <p class="kicker">观看协议</p>
-            <p class="hero__phase">controlled-first-wave · not-final</p>
-          </div>
-          <div class="hero__grid">
-            <div>
-              <h2>
-                先把页面做成<br />
-                <span>有观看秩序、真实性边界和场景纪律的样机</span>
-              </h2>
-            </div>
-            <div class="hero__copy">
-              <p>
-                当前不把 CHINA2 假装成已经完成的参考级成品站。当前更严肃的工作，是把 first-wave 的 4 个关键 scene 组织成一个更可审、可接样片、可判断气质统一性的长滚动样机。
-              </p>
-              <p>
-                这个页面会持续显示：scene 状态、anchor 边界、evidence 等级、allowed mode 与误读风险，而不是把它们藏在 docs 的边角。
-              </p>
-            </div>
-          </div>
-        </header>
-
-        <div class="experience">
-          <section class="stage-zone">
-            <div class="stage-frame">
-              <div class="stage-frame__topline">
-                <p class="kicker" id="stage-chapter">chapter</p>
-                <p class="stage-frame__counter" id="stage-counter">01 / 04</p>
-              </div>
-
-              <div class="stage-media" id="stage-media"></div>
-
-              <div class="stage-overlay">
-                <div class="stage-overlay__header">
-                  <div>
-                    <p class="stage-label" id="stage-status-label">Status</p>
-                    <h3 id="stage-title">Scene</h3>
-                  </div>
-                  <div class="stage-badges" id="stage-badges"></div>
-                </div>
-
-                <p class="stage-summary" id="stage-summary"></p>
-
-                <div class="overlay-grid">
-                  <article class="overlay-card">
-                    <p class="overlay-card__label">观看任务</p>
-                    <p id="stage-reading-task"></p>
-                  </article>
-                  <article class="overlay-card">
-                    <p class="overlay-card__label">不可滑向</p>
-                    <ul id="stage-risk-list" class="overlay-list"></ul>
-                  </article>
-                  <article class="overlay-card overlay-card--wide">
-                    <p class="overlay-card__label">证据与边界</p>
-                    <p id="stage-boundary"></p>
-                  </article>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <section class="story-zone">
-            <div class="protocol-strip">
-              <div>
-                <p class="protocol-strip__label">协议 01</p>
-                <p>入口如果未冻结，就必须把“未冻结”做成首层披露，而不是弱备注。</p>
-              </div>
-              <div>
-                <p class="protocol-strip__label">协议 02</p>
-                <p>reviewed candidate 只能是受控解释锚点，不能被页面包装成最终事实层。</p>
-              </div>
-              <div>
-                <p class="protocol-strip__label">协议 03</p>
-                <p>作品级页面不等于炫技；它首先要建立清晰、克制、可审校的观看秩序。</p>
-              </div>
-            </div>
-
-            <section class="scene-stack" id="scene-stack"></section>
-          </section>
-        </div>
-      </main>
-    </div>
-
-    <script type="module" src="./app.js"></script>
+    <main>
+      <p class="kicker">CHINA2 · legacy surface retired</p>
+      <h1>旧 reference-shell 入口不再承担并列实现身份</h1>
+      <p class="copy">
+        当前唯一可信实现入口是 `web/reference-shell/index.contract.html`。
+        本页面保留文件名只为兼容历史引用，不再作为独立主入口。
+      </p>
+      <a href="./index.contract.html">进入 canonical contract shell</a>
+    </main>
+    <script>
+      window.location.replace('./index.contract.html');
+    </script>
   </body>
 </html>

@@ -1,6 +1,6 @@
 {
   "id": "china2-first-wave-asset-resolution-contract",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "status": "controlled_first_wave_not_final",
   "pageEntry": "web/reference-shell/index.contract.html",
   "dropzoneRootFromReferenceShell": "../assets/first-wave/",
@@ -10,9 +10,9 @@
     "fallbackToPoster": true,
     "neverUpgradeIntroToFrozenEntry": true,
     "notes": [
-      "This contract does not claim automatic resolution is already fully implemented in every shell.",
-      "It defines the canonical mapping that future shell code must inherit.",
-      "If both manifest fields and dropzone files exist, shell behavior should prefer the stricter canonical mapping rather than ad hoc guessing."
+      "Automatic resolution is now landed on the canonical contract-driven shell.",
+      "Historical or legacy entry surfaces retained in the repository must not be treated as equivalent intake paths.",
+      "If both manifest fields and dropzone files exist, canonical shell behavior should prefer the stricter dropzone mapping rather than ad hoc guessing."
     ]
   },
   "requiredCoreScenes": [
@@ -73,8 +73,14 @@
     "manual page-entry choice",
     "manual handoff package stitching"
   ],
-  "knownOpenBlockers": [
-    "The repository root default page still does not fully collapse into the contract-driven shell.",
-    "Automatic dropzone resolution still needs implementation-level adoption in current shell code."
-  ]
+  "landedBehaviors": [
+    "The repository root default page now collapses into the contract-driven shell via canonical handoff / redirect.",
+    "The canonical contract shell now defaults to dropzone-first asset resolution on main.",
+    "Intro assets remain exploratory-only even if files are present."
+  ],
+  "remainingOpenConcerns": [
+    "Historical documentation that described pre-landing blockers must not be mistaken for current live-state truth.",
+    "The presence of auto-resolved assets does not remove disclosure, truth-boundary or review obligations from the agent."
+  ],
+  "knownOpenBlockers": []
 }

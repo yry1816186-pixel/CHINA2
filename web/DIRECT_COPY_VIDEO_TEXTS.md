@@ -16,8 +16,41 @@ Restrained semi-abstract structural reading of ancient Chinese timber architectu
 ## Scene 06 — `scene_06_conservation_boundary`
 Low-motion schematic conservation boundary study for ancient Chinese architectural heritage, bounded by the reviewed Ping Yao candidate only as a conservation-boundary anchor, clear distinction between historic layer and careful intervention layer, stable and neutral composition, annotation-friendly space, no triumph, no renewal spectacle, no before-after miracle narrative, conservation as care, maintenance, restraint and boundary judgement, historical layers remain visible, quiet civic dignity, no tourism framing, no promotional tone, high clarity, still-frame readability, made for a long-scroll art web experience
 
-## 文件名建议
+## 当前生成优先级
+### strong handoff 必需
+- `scene_03_structure_primary`
+- `scene_06_conservation_boundary`
+- `scene_01_orientation_order`
+
+### exploratory only
+- `scene_00_intro_entry`
+
+`scene_00_intro_entry` 当前仍是 disclosure-first / unresolved 入口测试资产。
+它不是强 handoff 必需项，也不是冻结最终入口证明。
+
+## canonical 文件名
+生成完成后，放进 dropzone 前请把文件名改成：
+
+- `scene_03_structure_primary.mp4`
+- `scene_06_conservation_boundary.mp4`
+- `scene_01_orientation_order.mp4`
+
+如果另外生成 intro 测试资产，只能命名为：
+- `scene_00_intro_entry.mp4`
+
+## 禁止继续使用的命名方式
+以下命名会与 canonical dropzone 规则冲突，不应再使用：
+
 - `scene_00_intro_entry_final.mp4`
 - `scene_01_orientation_order_final.mp4`
 - `scene_03_structure_primary_final.mp4`
 - `scene_06_conservation_boundary_final.mp4`
+
+原因不是审美问题，
+而是 `web/ASSET_DROPZONE_SPEC.json` 要求：
+- basename 必须等于 scene id
+- 禁止 `_final` 这类伪冻结后缀
+
+## 放置位置
+把生成好的文件放进：
+- `web/assets/first-wave/`

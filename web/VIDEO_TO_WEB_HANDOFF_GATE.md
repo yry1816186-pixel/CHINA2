@@ -1,25 +1,28 @@
 # Video to Web Handoff Gate
 
 ## 目的
-本文件直接回答你最关心的那个落地问题：
+本文件定义 **agent-side gate review**。
 
-**视频生成出来以后，什么时候可以交给网页 agent 继续做，什么时候绝对不能交？**
+它不再是用户前置任务清单。
+用户把视频放进 canonical dropzone 之后，
+由 agent 继续执行这里的判断，
+而不是把 gate review 再推回给用户。
 
-它的作用不是让流程看起来更完整，
-而是防止出现这种假闭环：
-- prompt 已复制
-- 视频已生成
-- agent 已接手
-- 结果却只是一个看起来高级、实际上已经偏离项目边界的网页
+## 当前输入前提
+本 gate 只在以下条件成立后运行：
+1. 用户已按 `web/USER_ONLY_WORKFLOW.md` 生成视频
+2. 视频已放进 `web/assets/first-wave/`
+3. 文件名已符合 canonical scene-id 命名
+4. agent 已读取 `web/ASSET_DROPZONE_SPEC.json` 与 `web/FIRST_WAVE_AGENT_STARTER_PACK.json`
 
 ## 当前结论先写在前面
-当前 first-wave 视频生成完成后，
-**不是自动进入网页实现阶段**。
+当前 first-wave 视频进入 dropzone 后，
+**仍然不是自动进入网页最终实现阶段**。
 
-只有在通过本文件的 handoff gate 后，
-视频才允许进入页面实现流程。
+但 gate review 的执行者应是 agent，
+不是用户。
 
-## 允许进入 handoff 的对象
+## 允许进入 strong handoff 的对象
 当前只允许这 3 条先进入标准 handoff 判断：
 1. `scene_03_structure_primary`
 2. `scene_06_conservation_boundary`
@@ -30,7 +33,7 @@
 - 辅助试装
 - 观看协议验证
 
-不允许被当成“已冻结最终入口视频”进入强 handoff。
+不允许被当成“已冻结最终入口视频”进入 strong handoff。
 
 ## 进入 handoff 前必须满足的 6 个条件
 ### Gate 01 · scene 身份正确
@@ -81,44 +84,30 @@
 
 如果视频本身已经制造了这种确定性错觉，也不能 handoff。
 
-## handoff 包必须包含什么
-当视频允许交给 agent 时，handoff 包里必须至少包含：
-1. 对应视频文件
-2. 对应 scene id
-3. 当前 status
-4. 对应 anchor
-5. 对应 source ref
-6. 对应 allowed mode
-7. 本 scene 的 must-not-become 列表
-8. 本 scene 的页面 reading task
+## handoff 包的责任归属
+当视频允许进入页面实现时，
+如需形成结构化 handoff 记录，
+应由 agent 基于以下输入自行整理：
+- dropzone 里的文件
+- `web/FIRST_WAVE_AGENT_STARTER_PACK.json`
+- `web/reference-shell/scene.contracts.json`
+- `web/scenes.manifest.json`
 
-缺任一项，handoff 包不完整。
+用户不负责手工组装 handoff package。
 
 ## agent 接手后必须继续保留什么
-agent 接手后不得把 handoff 包里的这些信息吞掉：
+agent 不得把以下信息吞掉：
 - status
 - evidence grade
 - anchor boundary
 - misreading risk
-- unresolved / reviewed_candidate 披露
+- unresolved / reviewed_candidate disclosure
 
 如果 agent 的页面必须靠隐藏这些信息才能“变高级”，说明网页方向已经错了。
 
-## 当前最重要的判断方式
-对每条视频，不要问：
-- 它炸不炸
-- 它酷不酷
-- 它像不像某个大项目
-
-而要问：
-- 它是不是仍然服从当前 scene 身份？
-- 它有没有越过 evidence / anchor 边界？
-- 它放进同一页面后会不会破坏整站气质？
-- 它是否允许页面继续诚实披露当前阶段的未完成状态？
-
 ## intro 的特别说明
 `scene_00_intro_entry` 当前哪怕生成出效果不错的视频，
-也不能因此自动升级为强 handoff 资产。
+也不能因此自动升级为 strong handoff 资产。
 
 它当前最多只能作为：
 - 观看协议入口测试资产
@@ -126,17 +115,9 @@ agent 接手后不得把 handoff 包里的这些信息吞掉：
 - 节奏验证资产
 
 除非它的真实 anchor 与 evidence 条件被正式关闭，
-否则不得把它交给 agent 当成最终入口真资产去组织全站。
+否则不得把它当成最终入口真资产去组织全站。
 
 ## 当前结论
-你之后复制提示词生成视频时，
-真正安全的流程不是：
+真正安全的流程应是：
 
-prompt -> video -> agent -> final site
-
-而是：
-
-prompt -> video -> gate review -> controlled handoff -> agent implementation -> page review
-
-少掉中间的 gate review，
-后面再强的 agent 也可能只是把错误做得更高级。
+**user prompt -> user video generation -> user drops files into canonical dropzone -> agent gate review -> controlled handoff inside project -> agent implementation -> page review**

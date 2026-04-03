@@ -1,15 +1,25 @@
 {
   "id": "china2-first-wave-asset-dropzone-spec",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "projectStatus": "controlled_first_wave_not_final",
+  "canonicalUserWorkflow": "web/USER_ONLY_WORKFLOW.md",
   "canonicalVideoPromptSource": "web/DIRECT_COPY_VIDEO_TEXTS.md",
   "canonicalPageEntry": "web/reference-shell/index.contract.html",
   "canonicalAgentStarterPack": "web/FIRST_WAVE_AGENT_STARTER_PACK.json",
   "userOnlySteps": [
     "copy prompts from web/DIRECT_COPY_VIDEO_TEXTS.md",
     "generate videos",
+    "rename generated files to canonical scene-id filenames",
     "drop generated files into web/assets/first-wave/",
     "hand project to agent"
+  ],
+  "userMustNotDo": [
+    "manual manifest editing",
+    "manual scene-to-file matching",
+    "manual handoff package assembly",
+    "manual page-entry selection",
+    "manual gate-review paperwork",
+    "manual conflict reconciliation across docs"
   ],
   "dropzone": {
     "root": "web/assets/first-wave/",
@@ -88,14 +98,15 @@
     "manual conflict reconciliation across docs"
   ],
   "agentStartingReads": [
-    "web/START_HERE.md",
+    "web/USER_ONLY_WORKFLOW.md",
+    "web/ASSET_DROPZONE_SPEC.json",
     "web/FIRST_WAVE_AGENT_STARTER_PACK.json",
     "web/reference-shell/REVIEW_CONTRACT.md",
     "web/reference-shell/index.contract.html"
   ],
   "knownCurrentLimitations": [
-    "The repository still contains older entry surfaces that can mislead implementers if they ignore the canonical path.",
-    "Automatic asset resolution from this dropzone is not yet guaranteed by every existing page entry.",
-    "Review, intake and handoff templates still require clearer role separation between user work and agent work."
+    "The repository still contains historical planning and legacy-entry files that must not override the canonical user-only workflow or canonical page entry.",
+    "Automatic asset resolution is only guaranteed on the canonical contract-driven shell, not on every historical surface retained in the repository.",
+    "The project is still a controlled first-wave implementation path, not a claim of final artistic completion or final historical closure."
   ]
 }

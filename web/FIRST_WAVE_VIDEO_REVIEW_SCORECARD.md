@@ -1,10 +1,11 @@
 # First-Wave Video Review Scorecard
 
 ## 目的
-本文件用于在视频生成后，对 first-wave 样片做统一审片。
+本文件是 **agent-side 审片表**。
 
-它不是主观感受清单，
-而是 `VIDEO_TO_WEB_HANDOFF_GATE.md` 的可执行打分表。
+它用于在用户把视频放进 canonical dropzone 之后，
+由 agent 统一审查 first-wave 样片，
+而不是让用户在 handoff 之前手工填写。
 
 ## 使用范围
 当前只用于：
@@ -12,7 +13,14 @@
 - `scene_06_conservation_boundary`
 - `scene_01_orientation_order`
 
-`scene_00_intro_entry` 仅可作保守占位和观看协议验证，不进入强 handoff 评分。
+`scene_00_intro_entry` 仅可作保守占位和观看协议验证，不进入 strong handoff 评分。
+
+## 使用前提
+在填写本表前，默认已经成立：
+- 用户已按 `web/USER_ONLY_WORKFLOW.md` 完成生成和 drop
+- 文件已进入 `web/assets/first-wave/`
+- agent 已读取 `web/FIRST_WAVE_AGENT_STARTER_PACK.json`
+- agent 已进入 `web/reference-shell/index.contract.html` 继续审看
 
 ## 评分方式
 每条视频按以下维度评分：
@@ -105,4 +113,7 @@
 
 ## 当前结论
 要把视频做成网页，不是看它单条是否“好看”，
-而是看它是否**还能服从页面级 truth-boundary 与 scene discipline**。
+而是看它是否 **还能服从页面级 truth-boundary 与 scene discipline**。
+
+但执行这份审查表的人必须是 agent，
+不是用户。

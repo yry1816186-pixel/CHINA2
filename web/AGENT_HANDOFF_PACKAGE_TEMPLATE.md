@@ -1,30 +1,42 @@
 # Agent Handoff Package Template
 
 ## 目的
-本文件用于把允许 handoff 的视频资产，整理成一个**不会丢边界、不会丢约束、不会丢 scene 身份**的标准包，再交给网页 agent。
+本文件现在只承担一个角色：
 
-它不是礼貌性附件，
-而是为了防止出现这种问题：
-- 给了 agent 视频
-- 没给 scene discipline
-- 没给边界文本
-- 没给 risk disclosure
-- 最后 agent 只能按视觉直觉自由发挥
+**当 agent 在 canonical dropzone 内完成审片后，如需把已通过 gate 的资产整理成内部结构化记录，可使用本模板。**
 
-## 使用前提
-只有在视频先通过：
-- `web/VIDEO_TO_WEB_HANDOFF_GATE.md`
-- `web/FIRST_WAVE_VIDEO_REVIEW_SCORECARD.md`
+它不再是用户必须手工组装的交付物。
 
-之后，才允许组装本 handoff package。
+## 当前责任边界
+用户的责任只到这里为止：
+- 复制 `web/DIRECT_COPY_VIDEO_TEXTS.md`
+- 生成视频
+- 把视频按 canonical scene-id 命名放进 `web/assets/first-wave/`
+
+从这里开始，以下工作都由 agent 自行承担：
+- 读取 dropzone
+- 做 gate review
+- 填 scorecard
+- 判断 strong handoff / exploratory only
+- 必要时整理内部 handoff package
+
+## agent 组包时的事实来源
+agent 必须从以下来源自动继承信息，而不是向用户反问：
+
+- `web/ASSET_DROPZONE_SPEC.json`
+- `web/FIRST_WAVE_AGENT_STARTER_PACK.json`
+- `web/reference-shell/scene.contracts.json`
+- `web/scenes.manifest.json`
+- `web/INTRO_ENTRY_EXECUTION_STRATEGY.md`
+- `web/AGENT_IMPLEMENTATION_BOUNDARY.md`
 
 ---
 
 ## Handoff Package Header
 - `handoff_id`:
 - `handoff_date`:
-- `prepared_by`:
-- `target_agent`:
+- `prepared_by_agent`:
+- `target_agent_or_runtime`:
 - `page_target`: `first-wave controlled long-scroll page`
 - `project_status`: `controlled_first_wave_not_final`
 
@@ -89,30 +101,7 @@ agent 不得自行：
   -
   -
 
-## Final Delivery Note to Agent
-请按当前仓库主表与 review contract 实现页面。
-你的任务不是重新解释项目，
-而是在不制造假确定性、不抹除 truth-boundary disclosure 的前提下，
-把该 scene 组织进 first-wave 长滚动页面。
-
----
-
-## 最小示例
-- `scene_id`: `scene_03_structure_primary`
-- `chapter_id`: `chapter_03_structure`
-- `status`: `reviewed_candidate_registered`
-- `anchor`: `CANDIDATE_FOGUANG_EAST_HALL_01`
-- `source_ref`: `SRC_CANDIDATE_FOGUANG_UNESCO_01`
-- `evidence_grade`: `E3_supported`
-- `allowed_mode`: `C_abstract_explanatory_layer`
-- `reading_task`: 把支撑层级与主结构栈做成解释层，而不是技术奇观
-- `must_not_become`:
-  - technical spectacle
-  - documentary real-site proof
-  - decorative mechanical show
-
 ## 当前结论
-handoff package 的质量，直接决定 agent 会不会开始自由发挥。
-
-包越完整，越接近受控实现；
-包越空，越接近“把错误做得更高级”。
+handoff package 仍然有价值，
+但它现在必须被收回为 **agent-side internal structure**，
+不能再作为用户额外劳动。
