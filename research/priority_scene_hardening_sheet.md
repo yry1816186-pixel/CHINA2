@@ -61,34 +61,37 @@
 
 ## Scene 03 — `scene_00_intro_entry`
 - `chapter_id`: `chapter_00_intro`
-- 当前状态：`secondary_priority_hardening_required`
-- 当前目标：给综合教学场景入口提供最小但真实的支撑
-- 当前缺口：
+- 当前状态：`exploratory_candidate_review_exists_but_not_master_ready`
+- 当前目标：给综合教学场景入口提供最小但真实的支撑，同时避免单一遗址误读
+- 当前情况：
   - `case_anchor`: `TBD_CASE_ANCHOR_INTRO_01`
   - `source_ref`: `SRC_TBD_INTRO_01`
   - `evidence_grade`: `E2_unresolved`
+  - 已有 exploratory candidate review，但当前不适合进入主表注册
 - 必补项：
-  1. 最小主锚点候选
+  1. 更低单一遗址风险的真实候选
   2. 最小来源索引
   3. “为什么这是综合教学场景而非单一遗址”的支撑说明
 - 完成判据：
   - 不再只靠入口气氛承担真实性说明
   - 能稳定防止“单一真实遗址”误读
+  - 候选不再因地标性过强而被挡在主表外
 
 ## Scene 04 — `scene_01_orientation_order`
 - `chapter_id`: `chapter_01_orientation`
-- 当前状态：`secondary_priority_hardening_required`
-- 当前目标：为秩序、阈限、方向建立最小可复核支撑
-- 当前缺口：
-  - `case_anchor`: `TBD_CASE_ANCHOR_ORIENTATION_01`
-  - `source_ref`: `SRC_TBD_ORDER_01`
-  - `evidence_grade`: `E2_unresolved`
-- 必补项：
-  1. 最小主锚点候选
-  2. 最小来源索引
-  3. 哪些秩序关系可讲、哪些礼制判断不可超讲
+- 当前状态：`reviewed_candidate_in_master_scope`
+- 当前目标：为秩序、阈限、方向建立受限真实候选锚点
+- 当前已录入候选：
+  - `case_anchor`: `CANDIDATE_FORBIDDEN_CITY_ORIENTATION_01`
+  - `source_ref`: `SRC_CANDIDATE_FORBIDDEN_CITY_UNESCO_01`
+  - `evidence_grade`: `E3_supported`
+- 当前仍需完成：
+  1. 秩序/阈限短 claim scope 的最终收口
+  2. 是否需要更细的 support 来源补空间序列说明
+  3. 明确禁止礼仪路线、权力叙事、中轴奇观化的边界
 - 完成判据：
-  - 不再只靠“轴线感”与“对称感”承担秩序解释
+  - 不再只靠 `SRC_TBD_ORDER_01`
+  - 已形成受限真实候选锚点
   - 不把秩序误读为礼仪表演路线
 
 ## 共通核查项

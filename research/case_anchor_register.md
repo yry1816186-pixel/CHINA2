@@ -30,8 +30,8 @@
 ## 章节级占位注册表
 | `chapter_id` | `case_anchor` | `case_support` | `building_type` | `time_scope` | `region_scope` | `evidence_grade` | `source_ref` | `dispute_flag` | `revision_status` | 备注 |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| `chapter_00_intro` | `TBD_CASE_ANCHOR_INTRO_01` | `[]` | `待验证项` | `待验证项` | `待验证项` | `E2_unresolved` | `待验证项` | `false` | `draft` | 仅用于入口真实性说明，不承载主知识点 |
-| `chapter_01_orientation` | `TBD_CASE_ANCHOR_ORIENTATION_01` | `[TBD_CASE_SUPPORT_ORIENTATION_01]` | `待验证项` | `待验证项` | `待验证项` | `E2_unresolved` | `待验证项` | `false` | `draft` | 只服务路径与秩序建立 |
+| `chapter_00_intro` | `TBD_CASE_ANCHOR_INTRO_01` | `[]` | `待验证项` | `待验证项` | `待验证项` | `E2_unresolved` | `待验证项` | `false` | `draft` | intro 已有 exploratory candidate review，但当前不适合进入主表注册 |
+| `chapter_01_orientation` | `CANDIDATE_FORBIDDEN_CITY_ORIENTATION_01` | `[TBD_CASE_SUPPORT_ORIENTATION_01]` | `imperial palace complex` | `Ming and Qing dynasties (candidate scope under review)` | `Beijing` | `E3_supported` | `SRC_CANDIDATE_FORBIDDEN_CITY_UNESCO_01` | `false` | `reviewed_candidate` | 候选主锚点已进入受限审查；仅可用于秩序、阈限、层级解释，不得滑向礼仪路线、权力叙事或纪录式实景证明 |
 | `chapter_02_progression` | `TBD_CASE_ANCHOR_PROGRESSION_01` | `[TBD_CASE_SUPPORT_PROGRESSION_01, TBD_CASE_SUPPORT_PROGRESSION_02]` | `待验证项` | `待验证项` | `待验证项` | `E2_unresolved` | `待验证项` | `false` | `draft` | 只服务递进关系与身体阅读 |
 | `chapter_03_structure` | `CANDIDATE_FOGUANG_EAST_HALL_01` | `[TBD_CASE_SUPPORT_STRUCTURE_01]` | `hall / Buddhist timber hall` | `Tang dynasty (candidate scope under review)` | `Mount Wutai, Shanxi` | `E3_supported` | `SRC_CANDIDATE_FOGUANG_UNESCO_01` | `false` | `reviewed_candidate` | 候选主锚点已进入受限审查；仅可用于解释层结构锚定，不得作纪录式实景证明 |
 | `chapter_04_craft` | `TBD_CASE_ANCHOR_CRAFT_01` | `[TBD_CASE_SUPPORT_CRAFT_01, TBD_CASE_SUPPORT_CRAFT_02]` | `待验证项` | `待验证项` | `待验证项` | `E2_unresolved` | `待验证项` | `false` | `draft` | 用于工艺细部回到整体系统 |
