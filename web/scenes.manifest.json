@@ -1,0 +1,66 @@
+{
+  "project": {
+    "id": "china2-first-wave-execution-shell",
+    "title": "中国古代建筑 · First-Wave Execution Shell",
+    "version": "0.1.0",
+    "mode": "controlled-first-wave"
+  },
+  "scenes": [
+    {
+      "id": "scene_00_intro_entry",
+      "chapterId": "chapter_00_intro",
+      "title": "入口与观看关系",
+      "status": "exploratory_candidate_review_exists_but_master_anchor_unresolved",
+      "anchor": "TBD_CASE_ANCHOR_INTRO_01",
+      "sourceRef": "SRC_TBD_INTRO_01",
+      "evidenceGrade": "E2_unresolved",
+      "allowedMode": "B_composite_teaching_scene",
+      "summary": "入口只负责建立观看方式与真实性边界，不承担主体知识高潮。",
+      "notes": "保留为未冻结入口。当前只适合保守占位，不适合高地标真实锚点。",
+      "poster": "",
+      "video": ""
+    },
+    {
+      "id": "scene_01_orientation_order",
+      "chapterId": "chapter_01_orientation",
+      "title": "定向、阈限与秩序",
+      "status": "reviewed_candidate_registered",
+      "anchor": "CANDIDATE_FORBIDDEN_CITY_ORIENTATION_01",
+      "sourceRef": "SRC_CANDIDATE_FORBIDDEN_CITY_UNESCO_01",
+      "evidenceGrade": "E3_supported",
+      "allowedMode": "B_composite_teaching_scene",
+      "summary": "秩序首先通过方向、路径、阈限与层级被组织出来，而不是先通过装饰被感知。",
+      "notes": "仅可用于秩序与阈限解释，不得滑向礼仪路线、权力叙事或纪录式实景证明。",
+      "poster": "",
+      "video": ""
+    },
+    {
+      "id": "scene_03_structure_primary",
+      "chapterId": "chapter_03_structure",
+      "title": "结构高潮",
+      "status": "reviewed_candidate_registered",
+      "anchor": "CANDIDATE_FOGUANG_EAST_HALL_01",
+      "sourceRef": "SRC_CANDIDATE_FOGUANG_UNESCO_01",
+      "evidenceGrade": "E3_supported",
+      "allowedMode": "C_abstract_explanatory_layer",
+      "summary": "结构组织与层次关系是建筑阅读的核心，而不是独立装饰的堆叠。",
+      "notes": "仅可作为解释层结构锚点，不得转成纪录式实景证明。",
+      "poster": "",
+      "video": ""
+    },
+    {
+      "id": "scene_06_conservation_boundary",
+      "chapterId": "chapter_05_conservation",
+      "title": "保护边界",
+      "status": "reviewed_candidate_registered",
+      "anchor": "CANDIDATE_PINGYAO_CONSERVATION_01",
+      "sourceRef": "SRC_CANDIDATE_PINGYAO_UNESCO_01",
+      "evidenceGrade": "E3_supported",
+      "allowedMode": "B_composite_teaching_scene_with_explanatory_boundary",
+      "summary": "保护是证据约束、持续照护与边界控制，不是焕新或奇迹叙事。",
+      "notes": "仅可作为保护边界解释锚点，不得滑向旅游宣传或修复奇迹。",
+      "poster": "",
+      "video": ""
+    }
+  ]
+}
