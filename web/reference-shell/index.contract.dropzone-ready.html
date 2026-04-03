@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CHINA2 · Contract-Driven Reference Shell · Dropzone Ready</title>
+    <meta
+      name="description"
+      content="A dropzone-ready contract-driven first-wave review shell for CHINA2 that reads structured scene contracts and canonical first-wave asset mappings."
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <aside class="side-rail">
+        <div class="side-rail__inner">
+          <p class="kicker">CHINA2</p>
+          <h1>Contract-Driven Reference Shell</h1>
+          <p class="side-rail__intro">
+            这个版本进一步把 `web/assets/first-wave/` 作为 canonical asset dropzone 接进 contract-driven shell。目标不是把页面说成已经 final，而是减少用户手工接线，减少 agent 自由发挥空间。
+          </p>
+
+          <section class="rail-block rail-block--warning">
+            <p class="rail-block__label">当前硬边界</p>
+            <ul id="hard-boundaries" class="rail-list"></ul>
+          </section>
+
+          <section class="rail-block">
+            <p class="rail-block__label">项目现实</p>
+            <div class="metrics" id="metrics"></div>
+          </section>
+
+          <nav class="scene-index" aria-label="场景索引" id="scene-index"></nav>
+        </div>
+      </aside>
+
+      <main class="main-column">
+        <header class="hero">
+          <div class="hero__eyebrow-row">
+            <p class="kicker">数据驱动审查</p>
+            <p class="hero__phase">contract-driven · first-wave · dropzone-ready · not-final</p>
+          </div>
+          <div class="hero__grid">
+            <div>
+              <h2>
+                把 scene 合同与<br />
+                <span>canonical dropzone 一起接到页面上</span>
+              </h2>
+            </div>
+            <div class="hero__copy">
+              <p>
+                这个草案版本继续读取 `scene.contracts.json` 与 `scenes.manifest.json`，同时优先按 `ASSET_RESOLUTION_CONTRACT.json` 与 `web/assets/first-wave/` 解析 first-wave 资产。
+              </p>
+              <p>
+                它的目标不是宣布“manifest 已无用”，而是把 manifest 退回到事实层 / 补充层，尽量不再让用户手工做 scene-to-file 接线。
+              </p>
+            </div>
+          </div>
+        </header>
+
+        <div class="experience">
+          <section class="stage-zone">
+            <div class="stage-frame">
+              <div class="stage-frame__topline">
+                <p class="kicker" id="stage-chapter">chapter</p>
+                <p class="stage-frame__counter" id="stage-counter">01 / 04</p>
+              </div>
+
+              <div class="stage-media" id="stage-media"></div>
+
+              <div class="stage-overlay">
+                <div class="stage-overlay__header">
+                  <div>
+                    <p class="stage-label" id="stage-status-label">Status</p>
+                    <h3 id="stage-title">Scene</h3>
+                  </div>
+                  <div class="stage-badges" id="stage-badges"></div>
+                </div>
+
+                <p class="stage-summary" id="stage-summary"></p>
+
+                <div class="overlay-grid">
+                  <article class="overlay-card">
+                    <p class="overlay-card__label">观看任务</p>
+                    <p id="stage-reading-task"></p>
+                  </article>
+                  <article class="overlay-card">
+                    <p class="overlay-card__label">不可滑向</p>
+                    <ul id="stage-risk-list" class="overlay-list"></ul>
+                  </article>
+                  <article class="overlay-card overlay-card--wide">
+                    <p class="overlay-card__label">证据与边界</p>
+                    <p id="stage-boundary"></p>
+                  </article>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="story-zone">
+            <div class="protocol-strip">
+              <div>
+                <p class="protocol-strip__label">协议 01</p>
+                <p>页面读取 structured contract，不再只信任实现者脑内理解。</p>
+              </div>
+              <div>
+                <p class="protocol-strip__label">协议 02</p>
+                <p>first-wave 资产优先从 canonical dropzone 继承，不再把 manifest 手工接线默认推回给用户。</p>
+              </div>
+              <div>
+                <p class="protocol-strip__label">协议 03</p>
+                <p>即使自动读到视频，reviewed candidate / unresolved 披露也不能消失。</p>
+              </div>
+            </div>
+
+            <section class="scene-stack" id="scene-stack"></section>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <script type="module" src="./app.contract.dropzone-ready.js"></script>
+  </body>
+</html>
