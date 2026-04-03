@@ -33,9 +33,9 @@
 | `chapter_00_intro` | `TBD_CASE_ANCHOR_INTRO_01` | `[]` | `待验证项` | `待验证项` | `待验证项` | `E2_unresolved` | `待验证项` | `false` | `draft` | 仅用于入口真实性说明，不承载主知识点 |
 | `chapter_01_orientation` | `TBD_CASE_ANCHOR_ORIENTATION_01` | `[TBD_CASE_SUPPORT_ORIENTATION_01]` | `待验证项` | `待验证项` | `待验证项` | `E2_unresolved` | `待验证项` | `false` | `draft` | 只服务路径与秩序建立 |
 | `chapter_02_progression` | `TBD_CASE_ANCHOR_PROGRESSION_01` | `[TBD_CASE_SUPPORT_PROGRESSION_01, TBD_CASE_SUPPORT_PROGRESSION_02]` | `待验证项` | `待验证项` | `待验证项` | `E2_unresolved` | `待验证项` | `false` | `draft` | 只服务递进关系与身体阅读 |
-| `chapter_03_structure` | `TBD_CASE_ANCHOR_STRUCTURE_01` | `[TBD_CASE_SUPPORT_STRUCTURE_01]` | `待验证项` | `待验证项` | `待验证项` | `E2_unresolved` | `待验证项` | `false` | `draft` | 结构高潮章可额外保留一个受限 `A_real_anchor` 候选 |
+| `chapter_03_structure` | `CANDIDATE_FOGUANG_EAST_HALL_01` | `[TBD_CASE_SUPPORT_STRUCTURE_01]` | `hall / Buddhist timber hall` | `Tang dynasty (candidate scope under review)` | `Mount Wutai, Shanxi` | `E3_supported` | `SRC_CANDIDATE_FOGUANG_UNESCO_01` | `false` | `reviewed_candidate` | 候选主锚点已进入受限审查；仅可用于解释层结构锚定，不得作纪录式实景证明 |
 | `chapter_04_craft` | `TBD_CASE_ANCHOR_CRAFT_01` | `[TBD_CASE_SUPPORT_CRAFT_01, TBD_CASE_SUPPORT_CRAFT_02]` | `待验证项` | `待验证项` | `待验证项` | `E2_unresolved` | `待验证项` | `false` | `draft` | 用于工艺细部回到整体系统 |
-| `chapter_05_conservation` | `TBD_CASE_ANCHOR_CONSERVATION_01` | `[TBD_CASE_SUPPORT_CONSERVATION_01]` | `待验证项` | `待验证项` | `待验证项` | `E2_unresolved` | `待验证项` | `false` | `draft` | 默认进入保护层说明，不进入单一实景证明 |
+| `chapter_05_conservation` | `CANDIDATE_PINGYAO_CONSERVATION_01` | `[TBD_CASE_SUPPORT_CONSERVATION_01]` | `historic urban fabric / traditional dwellings and associated heritage structures` | `14th–20th century urban fabric (candidate scope under review)` | `Pingyao County, Shanxi` | `E3_supported` | `SRC_CANDIDATE_PINGYAO_UNESCO_01` | `false` | `reviewed_candidate` | 候选主锚点已进入受限审查；仅可用于保护边界解释，不得滑向旅游宣传或修复奇迹叙事 |
 | `chapter_06_outro` | `TBD_CASE_ANCHOR_OUTRO_01` | `[]` | `待验证项` | `待验证项` | `待验证项` | `E2_unresolved` | `待验证项` | `false` | `draft` | 仅用于方法回收，不承担新事实引入 |
 
 ## 状态升级规则

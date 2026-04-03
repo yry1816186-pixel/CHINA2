@@ -27,38 +27,36 @@
 
 ## Scene 01 — `scene_03_structure_primary`
 - `chapter_id`: `chapter_03_structure`
-- 当前状态：`priority_hardening_required`
-- 当前目标：把结构章主解释容器从占位规划状态推进到可校准状态
-- 当前缺口：
-  - `case_anchor`: `TBD_CASE_ANCHOR_STRUCTURE_01`
-  - `source_ref`: `SRC_TBD_STRUCTURE_01`
-  - `evidence_grade`: `E2_unresolved`
-- 必补项：
-  1. 至少 1 个主锚点候选
-  2. 至少 1 个可复核来源索引
-  3. 主结构论断可支撑范围说明
-  4. 是否允许受限 `A_real_anchor` 候选的判断
+- 当前状态：`reviewed_candidate_in_master_scope`
+- 当前目标：把结构章主解释容器从占位规划状态推进到受限真实候选审查状态
+- 当前已录入候选：
+  - `case_anchor`: `CANDIDATE_FOGUANG_EAST_HALL_01`
+  - `source_ref`: `SRC_CANDIDATE_FOGUANG_UNESCO_01`, `SRC_CANDIDATE_FOGUANG_STRUCTURAL_STUDY_01`
+  - `evidence_grade`: `E3_supported`
+- 当前仍需完成：
+  1. 主结构论断短 claim scope 的最终收口
+  2. 是否需要额外 support 来源补 bracket-set / load-path 细节
+  3. 是否允许受限 `A_real_anchor` 候选的判断
 - 完成判据：
   - 不再仅靠 `SRC_TBD_STRUCTURE_01`
-  - evidence 至少提升到 `E3_supported`
+  - 已形成受限真实候选锚点
   - 能明确说明哪些结构关系可讲、哪些不可讲
 
 ## Scene 02 — `scene_06_conservation_boundary`
 - `chapter_id`: `chapter_05_conservation`
-- 当前状态：`priority_hardening_required`
-- 当前目标：把保护边界内容从“示意性占位”推进到“可审解释性边界”
-- 当前缺口：
-  - `case_anchor`: `TBD_CASE_ANCHOR_CONSERVATION_01`
-  - `source_ref`: `SRC_TBD_CONSERVATION_01`
-  - `evidence_grade`: `E2_unresolved`
-- 必补项：
-  1. 至少 1 个保护边界主锚点候选
-  2. 至少 1 个来源索引，能区分历史层与照护层
-  3. 明确哪些表述只能示意，哪些表述可进入解释层
-  4. 明确禁止滑向“翻新宣传片”语义的边界
+- 当前状态：`reviewed_candidate_in_master_scope`
+- 当前目标：把保护边界内容从“示意性占位”推进到受限真实候选审查状态
+- 当前已录入候选：
+  - `case_anchor`: `CANDIDATE_PINGYAO_CONSERVATION_01`
+  - `source_ref`: `SRC_CANDIDATE_PINGYAO_UNESCO_01`, `SRC_CANDIDATE_PINGYAO_PROGRAMME_01`
+  - `evidence_grade`: `E3_supported`
+- 当前仍需完成：
+  1. 保护边界短 claim scope 的最终收口
+  2. 是否需要更细 building-level intervention support 来源
+  3. 明确禁止滑向“翻新宣传片”语义的边界
 - 完成判据：
   - 不再只靠占位来源
-  - evidence 至少提升到 `E3_supported`
+  - 已形成受限真实候选锚点
   - 视频不再承担唯一事实证明角色
 
 ## Scene 03 — `scene_00_intro_entry`

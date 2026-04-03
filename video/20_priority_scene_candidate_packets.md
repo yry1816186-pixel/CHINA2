@@ -21,24 +21,24 @@
 ## Candidate Packet 01
 - `scene_id`: `scene_03_structure_primary`
 - `chapter_id`: `chapter_03_structure`
-- `packet_status`: `candidate_not_execution_authorized`
-- `current_research_gate`: `requires_real_case_anchor_and_source_ref`
+- `packet_status`: `candidate_not_execution_authorized_but_reviewed_candidate_registered`
+- `current_research_gate`: `reviewed_candidate_registered_requires_claim_scope_lock`
 - `goal`: 用最小解释性视觉语言校准结构章主解释能力
 - `allowed_mode`: `C_abstract_explanatory_layer`
 - `must_not_become`: real-site documentary proof / fantasy structure spectacle / decorative technical show
-- `minimal prompt direction`: restrained semi-abstract structural reading of ancient Chinese timber architecture, clear support-order hierarchy, one main structural stack only, slow explanatory reveal, readable in paused frame, no documentary claim, no site-specific identity, no magical effect, no blockbuster mechanics
-- `review focus`: paused-frame readability / load-order clarity / no false documentary certainty
+- `minimal prompt direction`: restrained semi-abstract structural reading of ancient Chinese timber architecture, bounded by the reviewed Foguang Temple East Hall candidate only as an explanatory anchor, clear support-order hierarchy, one main structural stack only, slow explanatory reveal, readable in paused frame, no documentary claim, no real-site reconstruction claim, no magical effect, no blockbuster mechanics
+- `review focus`: paused-frame readability / load-order clarity / no false documentary certainty / no totalizing structural claim spillover
 
 ## Candidate Packet 02
 - `scene_id`: `scene_06_conservation_boundary`
 - `chapter_id`: `chapter_05_conservation`
-- `packet_status`: `candidate_not_execution_authorized`
-- `current_research_gate`: `requires_real_case_anchor_and_source_ref`
+- `packet_status`: `candidate_not_execution_authorized_but_reviewed_candidate_registered`
+- `current_research_gate`: `reviewed_candidate_registered_requires_claim_scope_lock`
 - `goal`: 校准保护边界的解释能力，而不是制造翻新叙事
-- `allowed_mode`: `C_abstract_explanatory_layer`
+- `allowed_mode`: `B_composite_teaching_scene_with_explanatory_boundary`
 - `must_not_become`: renovation promo / miracle restoration reveal / sole factual proof clip
-- `minimal prompt direction`: low-motion schematic conservation boundary study, clear distinction between historic layer and careful intervention layer, neutral light, stable composition, annotation-friendly space, no triumph, no glossy renewal mood, no worker action, no site-specific certainty
-- `review focus`: boundary readability / non-promotional tone / no confusion between care and rebuild
+- `minimal prompt direction`: low-motion schematic conservation boundary study, bounded by the reviewed Ping Yao candidate only as a conservation-boundary anchor, clear distinction between historic layer and careful intervention layer, neutral light, stable composition, annotation-friendly space, no triumph, no glossy renewal mood, no worker action, no tourism-promo framing, no site-as-proof certainty
+- `review focus`: boundary readability / non-promotional tone / no confusion between care and rebuild / no restoration-success narrative
 
 ## Candidate Packet 03
 - `scene_id`: `scene_00_intro_entry`

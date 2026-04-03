@@ -32,6 +32,14 @@
 | `SRC_TBD_CONSERVATION_01` | `待验证项` | `E2_unresolved` | `[chapter_05_conservation]` | 当代保护边界与方法 | `internal_reference_only` | `false` | `draft` | 待补真实来源 |
 | `SRC_TBD_OUTRO_01` | `待验证项` | `E2_unresolved` | `[chapter_06_outro]` | 方法回收与边界重申 | `internal_reference_only` | `false` | `draft` | 仅服务总结，不引入新事实 |
 
+## 首批已审候选证据条目
+| `source_ref` | `source_type` | `default_evidence_grade` | `applicable_chapter_ids` | `claim_scope` | `copyright_status` | `dispute_flag` | `revision_status` | `notes` |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `SRC_CANDIDATE_FOGUANG_UNESCO_01` | `official_world_heritage_description` | `E3_supported` | `[chapter_03_structure]` | East Hall identity as major surviving Tang timber building; bounded use for structure-anchor explanation; no documentary proof extension | `public_web_reference_only` | `false` | `reviewed_candidate` | Use only for controlled structure-anchor explanation; do not extend to blanket structural claims |
+| `SRC_CANDIDATE_FOGUANG_STRUCTURAL_STUDY_01` | `scholarly_article` | `E3_supported` | `[chapter_03_structure]` | Limited support for Tang column-frame discussion and straight tenon joint style reference linked to Foguang Temple East Hall | `public_web_reference_only` | `false` | `reviewed_candidate` | Do not use as blanket support for all load-path or bracket-set claims |
+| `SRC_CANDIDATE_PINGYAO_UNESCO_01` | `official_world_heritage_description` | `E3_supported` | `[chapter_05_conservation]` | Property identity, authenticity/integrity framing, integrated conservation and management context for bounded conservation-boundary explanation | `public_web_reference_only` | `false` | `reviewed_candidate` | Do not extend to blanket proof for all conservation methodologies |
+| `SRC_CANDIDATE_PINGYAO_PROGRAMME_01` | `official_conservation_programme_description` | `E3_supported` | `[chapter_05_conservation]` | Bounded support for conservation/liveability/tourism balance, historical-layer preservation, restoration guidelines and integrated management discussion | `public_web_reference_only` | `false` | `reviewed_candidate` | Use only for conservation-boundary explanation; do not convert into restoration-success narrative |
+
 ## 来源类型操作说明
 - 真实来源补录后，必须写明 `source_type`，并按 `contracts/evidence_scale.md` 的默认映射赋级。
 - 若需将某条来源升级到 `E4_confirmed`，必须在 `notes` 或配套 research 文档中说明升级依据。
