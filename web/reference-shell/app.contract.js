@@ -14,6 +14,8 @@ const stageReadingTask = document.getElementById('stage-reading-task');
 const stageRiskList = document.getElementById('stage-risk-list');
 const stageBoundary = document.getElementById('stage-boundary');
 
+const DROPZONE_ROOT = '../assets/first-wave/';
+
 function escapeHtml(value) {
   return String(value)
     .replaceAll('&', '&amp;')
@@ -34,9 +36,7 @@ function getStatusLabel(scene) {
 }
 
 function renderHardBoundaries(boundaries) {
-  hardBoundariesRoot.innerHTML = boundaries
-    .map((item) => `<li>${escapeHtml(item)}</li>`)
-    .join('');
+  hardBoundariesRoot.innerHTML = boundaries.map((item) => `<li>${escapeHtml(item)}</li>`).join('');
 }
 
 function renderMetrics(metrics) {
@@ -82,6 +82,12 @@ function renderSceneStack(scenes) {
         .map((item) => `<li>${escapeHtml(item)}</li>`)
         .join('');
 
+      const assetState = scene.resolvedVideo
+        ? 'resolved video'
+        : scene.resolvedPoster
+          ? 'resolved poster'
+          : 'placeholder only';
+
       return `
         <article class="scene-card" id="${scene.id}" data-scene="${scene.id}">
           <div class="scene-card__head">
@@ -94,6 +100,7 @@ function renderSceneStack(scenes) {
             <aside class="scene-card__aside">
               <p class="scene-card__label">当前任务</p>
               <p class="scene-card__summary">${escapeHtml(scene.contract.readingTask)}</p>
+              <p class="scene-card__summary" style="margin-top:10px;">asset resolution · ${escapeHtml(assetState)}</p>
             </aside>
           </div>
 
@@ -130,13 +137,13 @@ function renderSceneStack(scenes) {
 }
 
 function renderMedia(scene) {
-  if (scene.video) {
-    stageMedia.innerHTML = `<video controls playsinline muted loop preload="metadata" src="${escapeHtml(scene.video)}"></video>`;
+  if (scene.resolvedVideo) {
+    stageMedia.innerHTML = `<video controls playsinline muted loop preload="metadata" src="${escapeHtml(scene.resolvedVideo)}"></video>`;
     return;
   }
 
-  if (scene.poster) {
-    stageMedia.innerHTML = `<img src="${escapeHtml(scene.poster)}" alt="${escapeHtml(scene.title)} poster" />`;
+  if (scene.resolvedPoster) {
+    stageMedia.innerHTML = `<img src="${escapeHtml(scene.resolvedPoster)}" alt="${escapeHtml(scene.title)} poster" />`;
     return;
   }
 
@@ -178,6 +185,46 @@ function setActiveScene(scene, index, total) {
   });
 }
 
+async function fileExists(url) {
+  try {
+    const response = await fetch(url, { method: 'HEAD' });
+    return response.ok;
+  } catch {
+    return false;
+  }
+}
+
+async function resolveSceneAssets(scene, contract) {
+  const videoName = contract.video || null;
+  const posterNames = contract.posters || [];
+
+  let resolvedVideo = scene.video || '';
+  let resolvedPoster = scene.poster || '';
+
+  if (videoName) {
+    const candidate = `${DROPZONE_ROOT}${videoName}`;
+    if (await fileExists(candidate)) {
+      resolvedVideo = candidate;
+    }
+  }
+
+  if (!resolvedPoster && posterNames.length) {
+    for (const posterName of posterNames) {
+      const candidate = `${DROPZONE_ROOT}${posterName}`;
+      if (await fileExists(candidate)) {
+        resolvedPoster = candidate;
+        break;
+      }
+    }
+  }
+
+  return {
+    ...scene,
+    resolvedVideo,
+    resolvedPoster
+  };
+}
+
 function mergeScenes(manifestScenes, contractsById) {
   return manifestScenes
     .filter((scene) => contractsById[scene.id])
@@ -187,15 +234,36 @@ function mergeScenes(manifestScenes, contractsById) {
     }));
 }
 
+function buildAssetContractMap(assetContract) {
+  const map = new Map();
+
+  for (const item of assetContract.requiredCoreScenes || []) {
+    map.set(item.sceneId, item);
+  }
+
+  for (const item of assetContract.exploratoryOnly || []) {
+    map.set(item.sceneId, item);
+  }
+
+  return map;
+}
+
 async function init() {
-  const [manifestResponse, contractResponse] = await Promise.all([
+  const [manifestResponse, contractResponse, assetResolutionResponse] = await Promise.all([
     fetch('../scenes.manifest.json'),
-    fetch('./scene.contracts.json')
+    fetch('./scene.contracts.json'),
+    fetch('./ASSET_RESOLUTION_CONTRACT.json')
   ]);
 
   const manifestData = await manifestResponse.json();
   const contractData = await contractResponse.json();
-  const scenes = mergeScenes(manifestData.scenes, contractData.sceneContracts);
+  const assetResolutionData = await assetResolutionResponse.json();
+
+  const assetMap = buildAssetContractMap(assetResolutionData);
+  const mergedScenes = mergeScenes(manifestData.scenes, contractData.sceneContracts);
+  const scenes = await Promise.all(
+    mergedScenes.map((scene) => resolveSceneAssets(scene, assetMap.get(scene.id) || {}))
+  );
 
   renderHardBoundaries(contractData.project.hardBoundaries);
   renderMetrics(contractData.project.metrics);
@@ -230,5 +298,5 @@ async function init() {
 
 init().catch((error) => {
   console.error(error);
-  sceneStack.innerHTML = '<p style="color:#d88c7b">contract-driven reference shell 读取失败。请确认静态服务器运行在 web/ 根目录，并检查 scene.contracts.json 与 scenes.manifest.json 是否可访问。</p>';
+  sceneStack.innerHTML = '<p style="color:#d88c7b">dropzone-ready contract shell 读取失败。请确认静态服务器运行在 web/ 根目录，并检查 scene.contracts.json、scenes.manifest.json 与 ASSET_RESOLUTION_CONTRACT.json 是否可访问。</p>';
 });

@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CHINA2 · Contract-Driven Reference Shell</title>
+    <title>CHINA2 · Contract-Driven Reference Shell · Dropzone Ready</title>
     <meta
       name="description"
-      content="A contract-driven first-wave review shell for CHINA2 that reads structured scene contracts instead of relying on inline page-script assumptions."
+      content="A dropzone-ready contract-driven first-wave review shell for CHINA2 that reads structured scene contracts and canonical first-wave asset mappings."
     />
     <link rel="stylesheet" href="./styles.css" />
   </head>
@@ -17,7 +17,7 @@
           <p class="kicker">CHINA2</p>
           <h1>Contract-Driven Reference Shell</h1>
           <p class="side-rail__intro">
-            这个并行页面不是 final 站，而是一个直接读取 structured scene contract 的审查面。它的目标不是更花，而是更稳：让 scene 纪律、边界文本和披露要求不再藏在脚本硬编码里。
+            这个版本进一步把 `web/assets/first-wave/` 作为 canonical asset dropzone 接进 contract-driven shell。目标不是把页面说成已经 final，而是减少用户手工接线，减少 agent 自由发挥空间。
           </p>
 
           <section class="rail-block rail-block--warning">
@@ -38,21 +38,21 @@
         <header class="hero">
           <div class="hero__eyebrow-row">
             <p class="kicker">数据驱动审查</p>
-            <p class="hero__phase">contract-driven · first-wave · not-final</p>
+            <p class="hero__phase">contract-driven · first-wave · dropzone-ready · not-final</p>
           </div>
           <div class="hero__grid">
             <div>
               <h2>
-                把 scene 纪律<br />
-                <span>从文档和脚本里抽出来，直接接到页面上</span>
+                把 scene 合同与<br />
+                <span>canonical dropzone 一起接到页面上</span>
               </h2>
             </div>
             <div class="hero__copy">
               <p>
-                这个版本直接读取 `scene.contracts.json` 与 `scenes.manifest.json`。页面展示不再只依赖前端作者在脚本里手写理解，而是依赖一个更清晰的受控合同层。
+                这个草案版本继续读取 `scene.contracts.json` 与 `scenes.manifest.json`，同时优先按 `ASSET_RESOLUTION_CONTRACT.json` 与 `web/assets/first-wave/` 解析 first-wave 资产。
               </p>
               <p>
-                它仍然不声称项目已经 final，但它把后续实现最容易跑偏的部分——scene 纪律、边界文本、must-not-become、required disclosures——前移成了页面输入。
+                它的目标不是宣布“manifest 已无用”，而是把 manifest 退回到事实层 / 补充层，尽量不再让用户手工做 scene-to-file 接线。
               </p>
             </div>
           </div>
@@ -105,11 +105,11 @@
               </div>
               <div>
                 <p class="protocol-strip__label">协议 02</p>
-                <p>manifest 负责事实层，contract 负责 scene discipline；两层都必须保留。</p>
+                <p>first-wave 资产优先从 canonical dropzone 继承，不再把 manifest 手工接线默认推回给用户。</p>
               </div>
               <div>
                 <p class="protocol-strip__label">协议 03</p>
-                <p>页面不能因为想变高级，就把 reviewed candidate / unresolved 的披露吞掉。</p>
+                <p>即使自动读到视频，reviewed candidate / unresolved 披露也不能消失。</p>
               </div>
             </div>
 
@@ -119,6 +119,6 @@
       </main>
     </div>
 
-    <script type="module" src="./app.contract.js"></script>
+    <script type="module" src="./app.contract.dropzone-ready.js"></script>
   </body>
 </html>
