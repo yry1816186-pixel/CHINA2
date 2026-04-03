@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CHINA2 · Contract-Driven Reference Shell</title>
+    <meta
+      name="description"
+      content="A contract-driven first-wave review shell for CHINA2 that reads structured scene contracts instead of relying on inline page-script assumptions."
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <aside class="side-rail">
+        <div class="side-rail__inner">
+          <p class="kicker">CHINA2</p>
+          <h1>Contract-Driven Reference Shell</h1>
+          <p class="side-rail__intro">
+            这个并行页面不是 final 站，而是一个直接读取 structured scene contract 的审查面。它的目标不是更花，而是更稳：让 scene 纪律、边界文本和披露要求不再藏在脚本硬编码里。
+          </p>
+
+          <section class="rail-block rail-block--warning">
+            <p class="rail-block__label">当前硬边界</p>
+            <ul id="hard-boundaries" class="rail-list"></ul>
+          </section>
+
+          <section class="rail-block">
+            <p class="rail-block__label">项目现实</p>
+            <div class="metrics" id="metrics"></div>
+          </section>
+
+          <nav class="scene-index" aria-label="场景索引" id="scene-index"></nav>
+        </div>
+      </aside>
+
+      <main class="main-column">
+        <header class="hero">
+          <div class="hero__eyebrow-row">
+            <p class="kicker">数据驱动审查</p>
+            <p class="hero__phase">contract-driven · first-wave · not-final</p>
+          </div>
+          <div class="hero__grid">
+            <div>
+              <h2>
+                把 scene 纪律<br />
+                <span>从文档和脚本里抽出来，直接接到页面上</span>
+              </h2>
+            </div>
+            <div class="hero__copy">
+              <p>
+                这个版本直接读取 `scene.contracts.json` 与 `scenes.manifest.json`。页面展示不再只依赖前端作者在脚本里手写理解，而是依赖一个更清晰的受控合同层。
+              </p>
+              <p>
+                它仍然不声称项目已经 final，但它把后续实现最容易跑偏的部分——scene 纪律、边界文本、must-not-become、required disclosures——前移成了页面输入。
+              </p>
+            </div>
+          </div>
+        </header>
+
+        <div class="experience">
+          <section class="stage-zone">
+            <div class="stage-frame">
+              <div class="stage-frame__topline">
+                <p class="kicker" id="stage-chapter">chapter</p>
+                <p class="stage-frame__counter" id="stage-counter">01 / 04</p>
+              </div>
+
+              <div class="stage-media" id="stage-media"></div>
+
+              <div class="stage-overlay">
+                <div class="stage-overlay__header">
+                  <div>
+                    <p class="stage-label" id="stage-status-label">Status</p>
+                    <h3 id="stage-title">Scene</h3>
+                  </div>
+                  <div class="stage-badges" id="stage-badges"></div>
+                </div>
+
+                <p class="stage-summary" id="stage-summary"></p>
+
+                <div class="overlay-grid">
+                  <article class="overlay-card">
+                    <p class="overlay-card__label">观看任务</p>
+                    <p id="stage-reading-task"></p>
+                  </article>
+                  <article class="overlay-card">
+                    <p class="overlay-card__label">不可滑向</p>
+                    <ul id="stage-risk-list" class="overlay-list"></ul>
+                  </article>
+                  <article class="overlay-card overlay-card--wide">
+                    <p class="overlay-card__label">证据与边界</p>
+                    <p id="stage-boundary"></p>
+                  </article>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="story-zone">
+            <div class="protocol-strip">
+              <div>
+                <p class="protocol-strip__label">协议 01</p>
+                <p>页面读取 structured contract，不再只信任实现者脑内理解。</p>
+              </div>
+              <div>
+                <p class="protocol-strip__label">协议 02</p>
+                <p>manifest 负责事实层，contract 负责 scene discipline；两层都必须保留。</p>
+              </div>
+              <div>
+                <p class="protocol-strip__label">协议 03</p>
+                <p>页面不能因为想变高级，就把 reviewed candidate / unresolved 的披露吞掉。</p>
+              </div>
+            </div>
+
+            <section class="scene-stack" id="scene-stack"></section>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <script type="module" src="./app.contract.js"></script>
+  </body>
+</html>
